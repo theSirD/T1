@@ -1,25 +1,25 @@
-package DomainEntities.Transactions;
+package Lab1.DomainEntities.Transactions;
 
-import DomainEntities.BankAccounts.BaseBankAccount;
-import DomainServices.Utilities.CustomTuple;
+import Lab1.DomainEntities.BankAccounts.BaseBankAccount;
+import Lab1.DomainServices.Utilities.CustomTuple;
 
-public class PayInterestTransaction extends BaseTransaction {
+public class WriteOffCommissionTransaction extends BaseTransaction {
     private final BaseBankAccount _receiver;
 
-    public PayInterestTransaction(BaseBankAccount receiver) {
+    public WriteOffCommissionTransaction(BaseBankAccount receiver) {
         _receiver = receiver;
     }
 
     @Override
     public void execute() {
-        _receiver.getInterestPayed();
+        _receiver.writeOffCommission();
         CustomTuple<Long, BaseTransaction> transactionHistoryEntry = new CustomTuple<>(Long.valueOf(_receiver.transactionsHistory.size() + 1), this);
         _receiver.transactionsHistory.push(transactionHistoryEntry);
     }
 
     @Override
     public void undo() {
-        _receiver.unGetInterestPayed();
+        _receiver.unWriteOffCommission();
         _receiver.transactionsHistory.pop();
     }
 }

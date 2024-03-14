@@ -1,14 +1,15 @@
-package DomainServices.BankService;
+package Lab1.DomainServices.BankService;
 
 
-import DomainEntities.BankAccounts.*;
-import DomainEntities.Transactions.*;
-import DomainEntities.User.BankAccountStatus;
-import DomainEntities.User.User;
-import DomainEntities.User.UserStatus;
-import DomainServices.CentralBankService.CentralBankService;
-import DomainEntities.Transactions.TypeOfRegularTransaction;
-import DomainServices.Utilities.CustomTuple;
+
+import Lab1.DomainEntities.BankAccounts.*;
+import Lab1.DomainEntities.Transactions.*;
+import Lab1.DomainEntities.User.BankAccountStatus;
+import Lab1.DomainEntities.User.User;
+import Lab1.DomainEntities.User.UserStatus;
+import Lab1.DomainServices.CentralBankService.CentralBankService;
+import Lab1.DomainServices.Utilities.CustomTuple;
+import Lab1.DomainEntities.Transactions.TypeOfRegularTransaction;
 
 import java.util.*;
 public class BankService {
@@ -21,7 +22,7 @@ public class BankService {
 
     private Map<Long, User> _usersList = new HashMap<>();
 
-    public Map<Long, BaseBankAccount> _bankAccountsList = new HashMap<>();
+    public Map<Long, BaseBankAccount> bankAccountsList = new HashMap<>();
 
     private BaseTransaction _currentTransaction;
 
@@ -69,7 +70,7 @@ public class BankService {
                     new DepositBankAccount(isAccountTrustworthy ? null : _limitForUntrustworthyAccounts, statusOfAccount, idOfUser, _daysUntilExpirationOfDepositAccount, initialBalance, _monthlyInterestInPercent);
         };
 
-        _bankAccountsList.put(Long.valueOf(_bankAccountsList.size() + 1), account);
+        bankAccountsList.put(Long.valueOf(bankAccountsList.size() + 1), account);
     }
 
     public void updatePersonalInfo(User user, String address, String passport) {
@@ -104,7 +105,7 @@ public class BankService {
     }
 
     private void updateStatusOfBankAccountsToTrustworthy(Long userId) {
-        for (Map.Entry<Long, BaseBankAccount> account : _bankAccountsList.entrySet()) {
+        for (Map.Entry<Long, BaseBankAccount> account : bankAccountsList.entrySet()) {
             if (Objects.equals(account.getValue().userId, userId)) {
                 account.getValue().status = BankAccountStatus.Trustworthy;
                 account.getValue().limitForUntrustworthyAccounts = 0.0;
@@ -115,7 +116,7 @@ public class BankService {
     public void updateMonthlyInterestInPercent(Double newMonthlyInterestInPercent) {
         _monthlyInterestInPercent = newMonthlyInterestInPercent;
 
-        for (Map.Entry<Long, BaseBankAccount> account : _bankAccountsList.entrySet()) {
+        for (Map.Entry<Long, BaseBankAccount> account : bankAccountsList.entrySet()) {
             account.getValue().monthlyInterestInPercent = _monthlyInterestInPercent;
         }
     }
@@ -123,7 +124,7 @@ public class BankService {
     public void updateCommission(Double newCommission) {
         _commission = newCommission;
 
-        for (Map.Entry<Long, BaseBankAccount> account : _bankAccountsList.entrySet()) {
+        for (Map.Entry<Long, BaseBankAccount> account : bankAccountsList.entrySet()) {
             account.getValue().commission = _commission;
         }
     }
@@ -131,7 +132,7 @@ public class BankService {
     public void updateLimitForUntrustworthyAccounts(Double newLimitForUntrustworthyAccounts) {
         _limitForUntrustworthyAccounts = newLimitForUntrustworthyAccounts;
 
-        for (Map.Entry<Long, BaseBankAccount> account : _bankAccountsList.entrySet()) {
+        for (Map.Entry<Long, BaseBankAccount> account : bankAccountsList.entrySet()) {
             account.getValue().limitForUntrustworthyAccounts = _limitForUntrustworthyAccounts;
         }
     }
@@ -139,14 +140,14 @@ public class BankService {
     public void updateCreditLimit(Double newCreditLimit) {
         _creditLimit = newCreditLimit;
 
-        for (Map.Entry<Long, BaseBankAccount> account : _bankAccountsList.entrySet()) {
+        for (Map.Entry<Long, BaseBankAccount> account : bankAccountsList.entrySet()) {
             if (account.getValue().type == BankAccountType.Credit)
                 account.getValue().creditLimit = newCreditLimit;
         }
     }
 
     public void transferMoneyBetweenAccounts(Long senderBankId, Long senderAccountId, Long receiverBankId, Long receiverAccountId, Double amountOfMoney) {
-        Optional<Map.Entry<Long, BaseBankAccount>> senderAccountFromStorage = _bankAccountsList
+        Optional<Map.Entry<Long, BaseBankAccount>> senderAccountFromStorage = bankAccountsList
                 .entrySet()
                 .stream()
                 .filter(entry -> entry.getKey().equals(senderAccountId))
@@ -159,7 +160,7 @@ public class BankService {
             return;
         }
 
-        Optional<Map.Entry<Long, BaseBankAccount>> receiverAccountFromStorage = _bankAccountsList
+        Optional<Map.Entry<Long, BaseBankAccount>> receiverAccountFromStorage = bankAccountsList
                 .entrySet()
                 .stream()
                 .filter(entry -> entry.getKey().equals(receiverAccountId))
@@ -174,7 +175,7 @@ public class BankService {
     }
 
     public void removeMoneyFromAccount(Long accountId, Double amountOfMoney) {
-        Optional<Map.Entry<Long, BaseBankAccount>> AccountFromStorage = _bankAccountsList
+        Optional<Map.Entry<Long, BaseBankAccount>> AccountFromStorage = bankAccountsList
                 .entrySet()
                 .stream()
                 .filter(entry -> entry.getKey().equals(accountId))
@@ -188,7 +189,7 @@ public class BankService {
     }
 
     public void addMoneyToAccount(Long accountId, Double amountOfMoney) {
-        Optional<Map.Entry<Long, BaseBankAccount>> AccountFromStorage = _bankAccountsList
+        Optional<Map.Entry<Long, BaseBankAccount>> AccountFromStorage = bankAccountsList
                 .entrySet()
                 .stream()
                 .filter(entry -> entry.getKey().equals(accountId))
@@ -196,7 +197,7 @@ public class BankService {
 
         BaseBankAccount account = AccountFromStorage.get().getValue();
 
-        setTransaction(new RemoveMoneyTransaction(account, amountOfMoney));
+        setTransaction(new AddMoneyTransaction(account, amountOfMoney));
 
         executeTransaction();
     }
@@ -210,7 +211,7 @@ public class BankService {
     }
 
     public void CancelTransaction(Long idOfBankAccount, Long idOfTransaction) {
-        Optional<Map.Entry<Long, BaseBankAccount>> AccountFromStorage = _bankAccountsList
+        Optional<Map.Entry<Long, BaseBankAccount>> AccountFromStorage = bankAccountsList
                 .entrySet()
                 .stream()
                 .filter(entry -> entry.getKey().equals(idOfBankAccount))
@@ -231,19 +232,20 @@ public class BankService {
         while (!transactionsAfterTheCanceledOneList.isEmpty()) {
             currentTransaction = transactionsAfterTheCanceledOneList.peek();
             currentTransaction.getSecond().execute();
+            transactionsAfterTheCanceledOneList.pop();
         }
     }
 
     public void doRegularTransactionOnAccounts(TypeOfRegularTransaction type) {
         switch (type) {
             case WriteOffCommission:
-                for (Map.Entry<Long, BaseBankAccount> account : _bankAccountsList.entrySet()) {
+                for (Map.Entry<Long, BaseBankAccount> account : bankAccountsList.entrySet()) {
                     _currentTransaction = new WriteOffCommissionTransaction(account.getValue());
                     executeTransaction();
                 }
                 break;
             case PayInterest:
-                for (Map.Entry<Long, BaseBankAccount> account : _bankAccountsList.entrySet()) {
+                for (Map.Entry<Long, BaseBankAccount> account : bankAccountsList.entrySet()) {
                     _currentTransaction = new PayInterestTransaction(account.getValue());
                     executeTransaction();
                 }
@@ -256,7 +258,7 @@ public class BankService {
     }
 
     public Double calculateBalanceInTheFuture(Long accountId, Integer amountOfDays) {
-        Optional<Map.Entry<Long, BaseBankAccount>> AccountFromStorage = _bankAccountsList
+        Optional<Map.Entry<Long, BaseBankAccount>> AccountFromStorage = bankAccountsList
                 .entrySet()
                 .stream()
                 .filter(entry -> entry.getKey().equals(accountId))

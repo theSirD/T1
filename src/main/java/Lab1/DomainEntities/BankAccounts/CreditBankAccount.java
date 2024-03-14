@@ -1,6 +1,6 @@
-package DomainEntities.BankAccounts;
+package Lab1.DomainEntities.BankAccounts;
 
-import DomainEntities.User.BankAccountStatus;
+import Lab1.DomainEntities.User.BankAccountStatus;
 
 public class CreditBankAccount extends BaseBankAccount {
     private Boolean _commissionWasWrittenOff;

@@ -1,8 +1,8 @@
-package DomainEntities.BankAccounts;
+package Lab1.DomainEntities.BankAccounts;
 
-import DomainEntities.Transactions.BaseTransaction;
-import DomainEntities.User.BankAccountStatus;
-import DomainServices.Utilities.CustomTuple;
+import Lab1.DomainEntities.Transactions.BaseTransaction;
+import Lab1.DomainEntities.User.BankAccountStatus;
+import Lab1.DomainServices.Utilities.CustomTuple;
 
 import java.util.Stack;
 
@@ -13,11 +13,11 @@ abstract public class BaseBankAccount {
 
     public Double monthlyInterestInPercent;
 
-    protected Double accruedInterest;
+    protected Double accruedInterest = 0.0;
 
-    protected Double lastMonthAccruedInterest;
+    protected Double lastMonthAccruedInterest = 0.;
 
-    protected Long amountOfDaysBeforePayingAccruedInterest;
+    protected Long amountOfDaysBeforePayingAccruedInterest = 0L;
 
     public Long userId;
 
@@ -29,7 +29,7 @@ abstract public class BaseBankAccount {
 
     public BankAccountStatus status;
 
-    public Stack<CustomTuple<Long, BaseTransaction>> transactionsHistory;
+    public Stack<CustomTuple<Long, BaseTransaction>> transactionsHistory = new Stack<>();
 
     public Double getBalance() { return balance; }
 
@@ -40,7 +40,8 @@ abstract public class BaseBankAccount {
     abstract public void unWriteOffCommission();
 
     public void getInterestPayed() {
-        accruedInterest += balance * monthlyInterestInPercent / 365;
+        Double dailyInterestInPercent = monthlyInterestInPercent / 30;
+        accruedInterest += balance * dailyInterestInPercent / 100;
         amountOfDaysBeforePayingAccruedInterest += 1;
 
         if (amountOfDaysBeforePayingAccruedInterest == 30) {

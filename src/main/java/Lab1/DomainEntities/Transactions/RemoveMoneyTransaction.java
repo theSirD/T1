@@ -1,8 +1,8 @@
-package DomainEntities.Transactions;
+package Lab1.DomainEntities.Transactions;
 
-import DomainEntities.BankAccounts.BankAccountType;
-import DomainEntities.BankAccounts.BaseBankAccount;
-import DomainServices.Utilities.CustomTuple;
+import Lab1.DomainEntities.BankAccounts.BankAccountType;
+import Lab1.DomainEntities.BankAccounts.BaseBankAccount;
+import Lab1.DomainServices.Utilities.CustomTuple;
 
 public class RemoveMoneyTransaction  extends BaseTransaction {
     private final BaseBankAccount _receiver;
@@ -22,7 +22,8 @@ public class RemoveMoneyTransaction  extends BaseTransaction {
             if (_receiver.type == BankAccountType.Credit && _receiver.getBalance() - _amountOfMoneyToRemove < -_receiver.creditLimit)
                 return;
 
-            _receiver.limitForUntrustworthyAccounts -= _amountOfMoneyToRemove;
+            if (_receiver.limitForUntrustworthyAccounts != null)
+                _receiver.limitForUntrustworthyAccounts -= _amountOfMoneyToRemove;
             _receiver.setBalance(_receiver.getBalance() - _amountOfMoneyToRemove);
             CustomTuple<Long, BaseTransaction> transactionHistoryEntry = new CustomTuple<>(Long.valueOf(_receiver.transactionsHistory.size() + 1), this);
             _receiver.transactionsHistory.push(transactionHistoryEntry);

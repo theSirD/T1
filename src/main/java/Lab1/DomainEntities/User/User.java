@@ -1,7 +1,7 @@
-package DomainEntities.User;
+package Lab1.DomainEntities.User;
 
-import DomainEntities.BankAccounts.BankAccountType;
-import DomainServices.BankService.BankService;
+import Lab1.DomainEntities.BankAccounts.BankAccountType;
+import Lab1.DomainServices.BankService.BankService;
 
 public class User {
     private BankService _bank;

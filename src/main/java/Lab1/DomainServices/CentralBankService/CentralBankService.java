@@ -1,10 +1,10 @@
-package DomainServices.CentralBankService;
+package Lab1.DomainServices.CentralBankService;
 
-import DomainEntities.BankAccounts.BaseBankAccount;
-import DomainEntities.Transactions.BaseTransaction;
-import DomainEntities.Transactions.TransferMoneyBetweenAccountsTransaction;
-import DomainServices.BankService.BankService;
-import DomainEntities.Transactions.TypeOfRegularTransaction;
+import Lab1.DomainEntities.BankAccounts.BaseBankAccount;
+import Lab1.DomainEntities.Transactions.BaseTransaction;
+import Lab1.DomainEntities.Transactions.TransferMoneyBetweenAccountsTransaction;
+import Lab1.DomainServices.BankService.BankService;
+import Lab1.DomainEntities.Transactions.TypeOfRegularTransaction;
 
 import java.util.*;
 
@@ -36,17 +36,13 @@ public class CentralBankService {
 
         BankService receiverBank = receiverBankFromStorage.get().getValue();
 
-        Optional<Map.Entry<Long, BaseBankAccount>> receiverAccountFromStorage = receiverBank._bankAccountsList
+        Optional<Map.Entry<Long, BaseBankAccount>> receiverAccountFromStorage = receiverBank.bankAccountsList
                 .entrySet()
                 .stream()
                 .filter(entry -> entry.getKey().equals(receiverAccountId))
                 .findFirst();
 
         BaseBankAccount receiverAccount = receiverAccountFromStorage.get().getValue();
-
-        setTransaction(new TransferMoneyBetweenAccountsTransaction(receiverAccount, senderAccount, amountOfMoney));
-
-        executeTransaction();
 
         setTransaction(new TransferMoneyBetweenAccountsTransaction(receiverAccount, senderAccount, amountOfMoney));
 

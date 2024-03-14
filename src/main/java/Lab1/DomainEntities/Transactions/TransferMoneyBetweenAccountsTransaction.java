@@ -1,8 +1,8 @@
-package DomainEntities.Transactions;
+package Lab1.DomainEntities.Transactions;
 
-import DomainEntities.BankAccounts.BankAccountType;
-import DomainEntities.BankAccounts.BaseBankAccount;
-import DomainServices.Utilities.CustomTuple;
+import Lab1.DomainEntities.BankAccounts.BankAccountType;
+import Lab1.DomainEntities.BankAccounts.BaseBankAccount;
+import Lab1.DomainServices.Utilities.CustomTuple;
 
 public class TransferMoneyBetweenAccountsTransaction extends BaseTransaction {
     private final BaseBankAccount _sender;
@@ -24,7 +24,8 @@ public class TransferMoneyBetweenAccountsTransaction extends BaseTransaction {
             if (_sender.type == BankAccountType.Credit && _sender.getBalance() - _amountOfMoneyToTransfer < -_sender.creditLimit)
                 return;
 
-            _sender.limitForUntrustworthyAccounts -= _amountOfMoneyToTransfer;
+            if (_sender.limitForUntrustworthyAccounts != null)
+                _sender.limitForUntrustworthyAccounts -= _amountOfMoneyToTransfer;
             _sender.setBalance(_sender.getBalance() - _amountOfMoneyToTransfer);
             _receiver.setBalance(_receiver.getBalance() + _amountOfMoneyToTransfer);
             CustomTuple<Long, BaseTransaction> transactionHistoryEntry = new CustomTuple<>(Long.valueOf(_receiver.transactionsHistory.size() + 1), this);

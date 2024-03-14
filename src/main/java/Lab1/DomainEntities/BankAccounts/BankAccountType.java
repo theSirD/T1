@@ -1,4 +1,4 @@
-package DomainEntities.BankAccounts;
+package Lab1.DomainEntities.BankAccounts;
 
 public enum BankAccountType {
     Debit,

@@ -1,4 +1,4 @@
-package DomainServices.Utilities;
+package Lab1.DomainServices.Utilities;
 
 public class CustomTuple<A, B> {
     private A first;
