@@ -19,9 +19,6 @@ dependencies {
 javadoc {
     destinationDir = file("build/docs/javadoc")
 }
-test {
-    useJUnitPlatform()
-}
 
 repositories {
     mavenCentral()

@@ -2,7 +2,9 @@ package Lab1.User;
 
 import Lab1.BankAccounts.BankAccountType;
 import Lab1.BankService.BankService;
+import lombok.Getter;
 
+@Getter
 public class User {
     private BankService _bank;
     public String name;

@@ -1,7 +1,5 @@
 package Lab1.BankService;
 
-
-
 import Lab1.BankAccounts.*;
 import Lab1.Transactions.*;
 import Lab1.User.BankAccountStatus;
@@ -10,7 +8,6 @@ import Lab1.User.UserStatus;
 import Lab1.CentralBankService.CentralBankService;
 import Lab1.Utilities.CustomTuple;
 import Lab1.Transactions.TypeOfRegularTransaction;
-
 import java.util.*;
 public class BankService {
     private CentralBankService _centralBank;
@@ -75,7 +72,7 @@ public class BankService {
 
     public void updatePersonalInfo(User user, String address, String passport) {
         if (address == null && passport == null)
-            throw new RuntimeException();
+            return;
 
        switch (user.status) {
            case UserStatus.NoAddress:
