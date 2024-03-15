@@ -1,7 +1,7 @@
-package Lab1.DomainEntities.Transactions;
+package Lab1.Transactions;
 
-import Lab1.DomainEntities.BankAccounts.BaseBankAccount;
-import Lab1.DomainServices.Utilities.CustomTuple;
+import Lab1.BankAccounts.BaseBankAccount;
+import Lab1.Utilities.CustomTuple;
 
 public class AddMoneyTransaction extends BaseTransaction {
     private final BaseBankAccount _receiver;

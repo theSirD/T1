@@ -1,10 +1,10 @@
 package Lab1.test.java;
 
-import Lab1.DomainEntities.BankAccounts.BankAccountType;
-import Lab1.DomainEntities.BankAccounts.BaseBankAccount;
-import Lab1.DomainEntities.User.User;
-import Lab1.DomainServices.BankService.BankService;
-import Lab1.DomainServices.CentralBankService.CentralBankService;
+import Lab1.BankAccounts.BankAccountType;
+import Lab1.BankAccounts.BaseBankAccount;
+import Lab1.User.User;
+import Lab1.BankService.BankService;
+import Lab1.CentralBankService.CentralBankService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

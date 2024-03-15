@@ -1,8 +1,8 @@
-package Lab1.DomainEntities.Transactions;
+package Lab1.Transactions;
 
-import Lab1.DomainEntities.BankAccounts.BankAccountType;
-import Lab1.DomainEntities.BankAccounts.BaseBankAccount;
-import Lab1.DomainServices.Utilities.CustomTuple;
+import Lab1.BankAccounts.BankAccountType;
+import Lab1.BankAccounts.BaseBankAccount;
+import Lab1.Utilities.CustomTuple;
 
 public class TransferMoneyBetweenAccountsTransaction extends BaseTransaction {
     private final BaseBankAccount _sender;

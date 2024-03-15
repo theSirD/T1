@@ -1,8 +1,8 @@
-package Lab1.DomainEntities.BankAccounts;
+package Lab1.BankAccounts;
 
-import Lab1.DomainEntities.Transactions.BaseTransaction;
-import Lab1.DomainEntities.User.BankAccountStatus;
-import Lab1.DomainServices.Utilities.CustomTuple;
+import Lab1.Transactions.BaseTransaction;
+import Lab1.User.BankAccountStatus;
+import Lab1.Utilities.CustomTuple;
 
 import java.util.Stack;
 

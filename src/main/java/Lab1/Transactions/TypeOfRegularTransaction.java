@@ -1,4 +1,4 @@
-package Lab1.DomainEntities.Transactions;
+package Lab1.Transactions;
 
 public enum TypeOfRegularTransaction {
     WriteOffCommission,

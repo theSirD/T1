@@ -1,4 +1,4 @@
-package Lab1.DomainEntities.User;
+package Lab1.User;
 
 public enum BankAccountStatus {
     Trustworthy,

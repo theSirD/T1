@@ -1,15 +1,15 @@
-package Lab1.DomainServices.BankService;
+package Lab1.BankService;
 
 
 
-import Lab1.DomainEntities.BankAccounts.*;
-import Lab1.DomainEntities.Transactions.*;
-import Lab1.DomainEntities.User.BankAccountStatus;
-import Lab1.DomainEntities.User.User;
-import Lab1.DomainEntities.User.UserStatus;
-import Lab1.DomainServices.CentralBankService.CentralBankService;
-import Lab1.DomainServices.Utilities.CustomTuple;
-import Lab1.DomainEntities.Transactions.TypeOfRegularTransaction;
+import Lab1.BankAccounts.*;
+import Lab1.Transactions.*;
+import Lab1.User.BankAccountStatus;
+import Lab1.User.User;
+import Lab1.User.UserStatus;
+import Lab1.CentralBankService.CentralBankService;
+import Lab1.Utilities.CustomTuple;
+import Lab1.Transactions.TypeOfRegularTransaction;
 
 import java.util.*;
 public class BankService {

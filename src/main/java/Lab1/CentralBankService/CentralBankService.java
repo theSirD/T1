@@ -1,10 +1,10 @@
-package Lab1.DomainServices.CentralBankService;
+package Lab1.CentralBankService;
 
-import Lab1.DomainEntities.BankAccounts.BaseBankAccount;
-import Lab1.DomainEntities.Transactions.BaseTransaction;
-import Lab1.DomainEntities.Transactions.TransferMoneyBetweenAccountsTransaction;
-import Lab1.DomainServices.BankService.BankService;
-import Lab1.DomainEntities.Transactions.TypeOfRegularTransaction;
+import Lab1.BankAccounts.BaseBankAccount;
+import Lab1.Transactions.BaseTransaction;
+import Lab1.Transactions.TransferMoneyBetweenAccountsTransaction;
+import Lab1.BankService.BankService;
+import Lab1.Transactions.TypeOfRegularTransaction;
 
 import java.util.*;
 

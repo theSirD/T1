@@ -1,6 +1,6 @@
-package Lab1.DomainEntities.BankAccounts;
+package Lab1.BankAccounts;
 
-import Lab1.DomainEntities.User.BankAccountStatus;
+import Lab1.User.BankAccountStatus;
 
 public class DepositBankAccount extends BaseBankAccount {
     public Long daysUntilExpiration;
