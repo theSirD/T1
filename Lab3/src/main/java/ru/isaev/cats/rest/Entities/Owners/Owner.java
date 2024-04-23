@@ -3,6 +3,7 @@ package ru.isaev.cats.rest.Entities.Owners;
 import jakarta.persistence.*;
 import ru.isaev.cats.rest.Entities.Cats.Cat;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ public class Owner {
     private String last_name;
 
     //TODO localedate
-    private String birthday;
+    private LocalDate birthday;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -31,17 +32,12 @@ public class Owner {
     public Owner() {
     }
 
-    public Owner(Long id, String first_name, String last_name, String birthday, Set<Cat> catsList) {
-        this.id = id;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.birthday = birthday;
-        this.catsList = catsList;
-    }
-
-
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirst_name() {
@@ -68,11 +64,11 @@ public class Owner {
         this.last_name = lastName;
     }
 
-    public String getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 

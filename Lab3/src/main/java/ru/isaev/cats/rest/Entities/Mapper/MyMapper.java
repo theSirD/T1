@@ -11,6 +11,9 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 @Component
@@ -36,10 +39,13 @@ public class MyMapper implements IMyMapper {
         CatDto catDto = new CatDto();
 
         catDto.setId( cat.getId() );
-        catDto.setBirthday( cat.getBirthday()  );
+        catDto.setBirthday( cat.getBirthday().toString()  );
         catDto.setColor( cat.getColor() );
         catDto.setBreed( cat.getBreed() );
-        catDto.setOwnerId(cat.getOwner().getId());
+
+        Owner owner = cat.getOwner();
+        if (owner != null)
+            catDto.setOwnerId(cat.getOwner().getId());
 
         Set<Cat> listOfFriends = cat.getFriendsList();
         Set<Long> idsOfFriends = new HashSet<>();
@@ -76,11 +82,23 @@ public class MyMapper implements IMyMapper {
         Cat cat = new Cat();
 
         cat.setId( catDtoInput.getId() );
-        cat.setBirthday( catDtoInput.getBirthday() );
         cat.setColor( catDtoInput.getColor() );
         cat.setBreed( catDtoInput.getBreed() );
         cat.setOwner(null);
         cat.setFriendsList(null);
+
+
+        String birthday = catDtoInput.getBirthday();
+        try {
+            DateTimeFormatter formatter =
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(birthday, formatter);
+            cat.setBirthday(date);
+        }
+        catch (DateTimeParseException exc) {
+            System.out.printf("%s is not parsable!%n", birthday);
+            throw exc;
+        }
 
         return cat;
     }
@@ -94,7 +112,7 @@ public class MyMapper implements IMyMapper {
         OwnerDto ownerDto = new OwnerDto();
 
         ownerDto.setId( owner.getId() );
-        ownerDto.setBirthday( owner.getBirthday()  );
+        ownerDto.setBirthday( owner.getBirthday().toString()  );
         ownerDto.setFirst_name( owner.getFirst_name() );
         ownerDto.setLast_name( owner.getLast_name() );
         ownerDto.setId(owner.getId());
@@ -130,13 +148,24 @@ public class MyMapper implements IMyMapper {
             return null;
         }
 
-        Owner owner = new Owner(
-                ownerDto.getId(),
-                ownerDto.getFirst_name(),
-                ownerDto.getLast_name(),
-                ownerDto.getBirthday(),
-                null
-        );
+        Owner owner = new Owner();
+        String birthday = ownerDto.getBirthday();
+        try {
+            DateTimeFormatter formatter =
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(birthday, formatter);
+            owner.setBirthday(date);
+        }
+        catch (DateTimeParseException exc) {
+            System.out.printf("%s is not parsable!%n", birthday);
+            throw exc;
+        }
+
+
+        owner.setId( ownerDto.getId() );
+        owner.setFirstName( ownerDto.getFirst_name() );
+        owner.setLastName( ownerDto.getLast_name() );
+        owner.setCatsList(null);
 
         return owner;
     }

@@ -3,6 +3,8 @@ package ru.isaev.cats.rest.Entities.Cats;
 import jakarta.persistence.*;
 import ru.isaev.cats.rest.Entities.Owners.Owner;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 @Entity
@@ -13,8 +15,8 @@ public class Cat {
     private Long id;
 
     //TODO localedate
-    private String birthday;
-    //TODO enum
+    private LocalDate birthday;
+    //TODO enum. DONE
     private CatBreeds breed;
 
     private CatColors color;
@@ -54,11 +56,11 @@ public class Cat {
         return friendsList;
     }
 
-    public String getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 
