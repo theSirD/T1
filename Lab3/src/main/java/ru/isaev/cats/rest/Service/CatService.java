@@ -6,6 +6,7 @@ import ru.isaev.cats.rest.DAO.ICatDAO;
 import ru.isaev.cats.rest.Entities.Cats.Cat;
 import ru.isaev.cats.rest.Entities.Cats.CatBreeds;
 import ru.isaev.cats.rest.Entities.Cats.CatColors;
+import ru.isaev.cats.rest.Utilities.Exceptions.CatNotFoundExceptions;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,13 +21,17 @@ public class CatService {
     }
 
     public void addCat(Cat cat) {
-
         catDAO.save(cat);
     }
 
-    //TODO 20.4.24. advicecontroller
-    public Optional<Cat> getCatById(Long id) {
-        return catDAO.findById(id);
+    //TODO 20.4.24. advicecontroller. DONE
+    public Cat getCatById(Long id) {
+
+        Cat cat = catDAO.findById(id).orElseThrow(
+                () -> new CatNotFoundExceptions("Not found cat with id = " + id));
+
+
+        return cat;
     }
 
     public List<Cat> getCatsByColor(CatColors color) {

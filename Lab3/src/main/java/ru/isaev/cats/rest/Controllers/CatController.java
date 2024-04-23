@@ -30,7 +30,7 @@ public class CatController {
     @GetMapping("/{id}")
     public ResponseEntity<CatDto> getById(@PathVariable Long id) {
         return new ResponseEntity<>(
-                mapper.catToCatDto(catService.getCatById(id).get()),
+                mapper.catToCatDto(catService.getCatById(id)),
                 HttpStatus.OK
         );
     }

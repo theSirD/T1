@@ -26,17 +26,10 @@ public class OwnerController {
 
     @GetMapping("/{id}")
     public ResponseEntity<OwnerDto> getById(@PathVariable Long id) {
-        try {
-            return new ResponseEntity<>(
-                    mapper.ownerToOwnerDto(ownerService.getOwnerById(id).get()),
-                    HttpStatus.OK
-            );
-        } catch (NoSuchElementException e) {
-            return new ResponseEntity<>(
-                    new OwnerDto(),
-                    HttpStatus.NO_CONTENT
-            );
-        }
+        return new ResponseEntity<>(
+                mapper.ownerToOwnerDto(ownerService.getOwnerById(id)),
+                HttpStatus.OK
+        );
 
     }
 
