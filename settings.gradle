@@ -1,6 +1,3 @@
-rootProject.name = 'untitled'
-include 'src:main:Application'
-findProject(':src:main:Application')?.name = 'Application'
-include 'src:main:java:Lab2'
-findProject(':src:main:java:Lab2')?.name = 'Lab2'
+include 'Lab1'
+include 'Lab2'
 
