@@ -18,7 +18,7 @@ public class Owner {
 
     private String last_name;
 
-    //TODO localedate
+    //TODO localedate. DONE
     private LocalDate birthday;
 
     @OneToMany(fetch = FetchType.EAGER)

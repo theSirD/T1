@@ -42,26 +42,26 @@ public class OwnerController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<String> addOwner(@RequestBody OwnerDto ownerDto) {
+    public ResponseEntity<OwnerDto> addOwner(@RequestBody OwnerDto ownerDto) {
         Owner owner = mapper.ownerDtoToOwner(ownerDto);
         ownerService.addOwner(owner);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Owner was added");
+        return ResponseEntity.status(HttpStatus.CREATED).body(ownerDto);
     }
 
     @PostMapping("/edit")
-    public ResponseEntity<String> editOwner(@RequestBody OwnerDto ownerDto) {
+    public ResponseEntity<OwnerDto> editOwner(@RequestBody OwnerDto ownerDto) {
         Owner owner = mapper.ownerDtoToOwner(ownerDto);
         ownerService.updateOwner(owner);
 
-        return ResponseEntity.status(HttpStatus.OK).body("Owner was edited");
+        return ResponseEntity.status(HttpStatus.OK).body(ownerDto);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteOwnerById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteOwnerById(@PathVariable Long id) {
         ownerService.removeOwnerById(id);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Owner was deleted");
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
 
