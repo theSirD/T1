@@ -1,6 +1,7 @@
 package ru.isaev.cats.rest.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -8,10 +9,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.isaev.cats.rest.Entities.Owners.Owner;
 import ru.isaev.cats.rest.DAO.IOwnerDAO;
+import ru.isaev.cats.rest.Security.MyUserDetails;
 import ru.isaev.cats.rest.Utilities.Exceptions.CatNotFoundExceptions;
 import ru.isaev.cats.rest.Utilities.Exceptions.OwnerNotFoundException;
 
+import java.util.Objects;
 import java.util.Optional;
+
 
 @Service
 public class OwnerService {
@@ -39,10 +43,22 @@ public class OwnerService {
     }
 
     public void updateOwner(Owner owner) {
+        MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Owner currentOwner = currentPrincipal.getOwner();
+
+        if (!Objects.equals(currentOwner.getId(), owner.getId()))
+            return;
+
         ownerDAO.save(owner);
     }
 
     public void removeOwnerById(Long id) {
+        MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Owner currentOwner = currentPrincipal.getOwner();
+
+        if (!Objects.equals(currentOwner.getId(), id))
+            return;
+
         ownerDAO.deleteById(id);
     }
 }
