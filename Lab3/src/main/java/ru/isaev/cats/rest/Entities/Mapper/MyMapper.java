@@ -47,8 +47,8 @@ public class MyMapper implements IMyMapper {
         if (owner != null)
             catDto.setOwnerId(cat.getOwner().getId());
 
-        Set<Cat> listOfFriends = cat.getFriendsList();
-        Set<Long> idsOfFriends = new HashSet<>();
+        List<Cat> listOfFriends = cat.getFriendsList();
+        List<Long> idsOfFriends = new ArrayList<>();
 
         for (Cat friend:
              listOfFriends) {
@@ -117,8 +117,8 @@ public class MyMapper implements IMyMapper {
         ownerDto.setLast_name( owner.getLast_name() );
         ownerDto.setId(owner.getId());
 
-        Set<Cat> listOfCats = owner.getCatsList();
-        Set<Long> idsOfcats = new HashSet<>();
+        List<Cat> listOfCats = owner.getCatsList();
+        List<Long> idsOfcats = new ArrayList<>();
 
         for (Cat cat:
                 listOfCats) {

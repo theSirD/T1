@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.isaev.cats.rest.Entities.Cats.CatBreeds;
 import ru.isaev.cats.rest.Entities.Cats.CatColors;
 
+import java.util.List;
 import java.util.Set;
 
 public class CatDto {
@@ -23,7 +24,7 @@ public class CatDto {
     private CatBreeds breed;
 
     @JsonProperty("idsOfFriendsList")
-    private Set<Long> friends;
+    private List<Long> friends;
 
     public Long getId() {
         return id;
@@ -65,11 +66,11 @@ public class CatDto {
         this.breed = breed;
     }
 
-    public Set<Long> getFriends() {
+    public List<Long> getFriends() {
         return friends;
     }
 
-    public void setFriends(Set<Long> friends) {
+    public void setFriends(List<Long> friends) {
         this.friends = friends;
     }
 }

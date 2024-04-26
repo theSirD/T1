@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import ru.isaev.cats.rest.Entities.Owners.Owner;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+
 @Entity
 @Table(name = "CATS")
 public class Cat {
@@ -22,16 +21,16 @@ public class Cat {
     private CatColors color;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Owner owner;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "cat_friends",
             joinColumns = @JoinColumn(name = "cat_id"),
             inverseJoinColumns = @JoinColumn(name = "friend_id")
 
     )
-    private Set<Cat> friendsList = new HashSet<>();
+    private List<Cat> friendsList = new ArrayList<>();
 
     public Cat() {
     }
@@ -48,11 +47,11 @@ public class Cat {
         this.owner = owner;
     }
 
-    public void setFriendsList(Set<Cat> friendsList) {
+    public void setFriendsList(List<Cat> friendsList) {
         this.friendsList = friendsList;
     }
 
-    public Set<Cat> getFriendsList() {
+    public List<Cat> getFriendsList() {
         return friendsList;
     }
 

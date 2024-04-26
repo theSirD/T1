@@ -5,7 +5,9 @@ import ru.isaev.cats.rest.Entities.Cats.Cat;
 import ru.isaev.cats.rest.Security.Roles;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,7 +34,7 @@ public class Owner {
             joinColumns = @JoinColumn(name = "host_id"),
             inverseJoinColumns = @JoinColumn(name = "cat_id")
     )
-    private Set<Cat> catsList = new HashSet<>();
+    private List<Cat> catsList = new ArrayList<>();
 
     public Owner() {
     }
@@ -69,11 +71,11 @@ public class Owner {
         this.role = role;
     }
 
-    public Set<Cat> getCatsList() {
+    public List<Cat> getCatsList() {
         return catsList;
     }
 
-    public void setCatsList(Set<Cat> catsList) {
+    public void setCatsList(List<Cat> catsList) {
         this.catsList = catsList;
     }
 
