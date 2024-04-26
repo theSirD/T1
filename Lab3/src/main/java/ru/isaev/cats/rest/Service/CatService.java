@@ -41,10 +41,6 @@ public class CatService {
                 catsOfOwner) {
                 cat.addFriend(catOfOwner, true);
                 updateCat(catOfOwner);
-//            Set<Cat> friendsOfCatOfOwner = catOfOwner.getFriendsList();
-//            friendsOfCatOfOwner.add(cat);
-//            updateCat(catOfOwner);
-//            friendsOfNewCat.add(catOfOwner);
         }
         cat.setFriendsList(friendsOfNewCat);
         cat.setOwner(currentOwner);
