@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.isaev.cats.rest.Entities.Owners.Owner;
 import ru.isaev.cats.rest.DAO.IOwnerDAO;
 import ru.isaev.cats.rest.Security.MyUserDetails;
+import ru.isaev.cats.rest.Security.Roles;
 import ru.isaev.cats.rest.Utilities.Exceptions.CatNotFoundExceptions;
 import ru.isaev.cats.rest.Utilities.Exceptions.OwnerNotFoundException;
 
@@ -46,7 +47,7 @@ public class OwnerService {
         MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Owner currentOwner = currentPrincipal.getOwner();
 
-        if (!Objects.equals(currentOwner.getId(), owner.getId()))
+        if (!Objects.equals(currentOwner.getId(), owner.getId()) && currentOwner.getRole() != Roles.ADMIN)
             return;
 
         ownerDAO.save(owner);
@@ -56,7 +57,7 @@ public class OwnerService {
         MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Owner currentOwner = currentPrincipal.getOwner();
 
-        if (!Objects.equals(currentOwner.getId(), id))
+        if (!Objects.equals(currentOwner.getId(), id)  && currentOwner.getRole() != Roles.ADMIN)
             return;
 
         ownerDAO.deleteById(id);

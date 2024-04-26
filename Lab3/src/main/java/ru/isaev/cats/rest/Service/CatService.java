@@ -11,6 +11,7 @@ import ru.isaev.cats.rest.Entities.Cats.CatBreeds;
 import ru.isaev.cats.rest.Entities.Cats.CatColors;
 import ru.isaev.cats.rest.Entities.Owners.Owner;
 import ru.isaev.cats.rest.Security.MyUserDetails;
+import ru.isaev.cats.rest.Security.Roles;
 import ru.isaev.cats.rest.Utilities.Exceptions.CatNotFoundExceptions;
 
 import java.util.*;
@@ -57,7 +58,7 @@ public class CatService {
         Cat cat = catDAO.findById(id).orElseThrow(
                 () -> new CatNotFoundExceptions("Not found cat with id = " + id));
 
-        if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId()))
+        if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId())  && currentOwner.getRole() != Roles.ADMIN)
             cat = null;
 
 
@@ -67,6 +68,10 @@ public class CatService {
     public List<Cat> getCatsByColor(CatColors color) {
         MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Owner currentOwner = currentPrincipal.getOwner();
+
+        if ( currentOwner.getRole() == Roles.ADMIN) {
+            return catDAO.findByColor(color);
+        }
 
         List<Cat> catsOfCertainColor = new ArrayList<>();
         for (Cat cat :
@@ -82,12 +87,20 @@ public class CatService {
         MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Owner currentOwner = currentPrincipal.getOwner();
 
+        if ( currentOwner.getRole() == Roles.ADMIN) {
+            return catDAO.findAll();
+        }
+
         return currentOwner.getCatsList();
     }
 
     public List<Cat> getCatsByBreed(CatBreeds breed) {
         MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Owner currentOwner = currentPrincipal.getOwner();
+
+        if ( currentOwner.getRole() == Roles.ADMIN) {
+            return catDAO.findByBreed(breed);
+        }
 
         List<Cat> catsOfCertainBreed = new ArrayList<>();
         for (Cat cat :
@@ -103,7 +116,7 @@ public class CatService {
         MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Owner currentOwner = currentPrincipal.getOwner();
 
-        if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId()))
+        if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId()) && currentOwner.getRole() != Roles.ADMIN)
             return;
 
         catDAO.save(cat);
@@ -116,8 +129,9 @@ public class CatService {
         Cat cat = catDAO.findById(id).orElseThrow(
                 () -> new CatNotFoundExceptions("No cat with id = " + id));
 
-        if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId()))
+        if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId()) && currentOwner.getRole() != Roles.ADMIN)
             return;
+
         catDAO.deleteById(id);
     }
 }
