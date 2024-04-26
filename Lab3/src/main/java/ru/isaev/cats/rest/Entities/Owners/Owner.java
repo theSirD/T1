@@ -2,6 +2,7 @@ package ru.isaev.cats.rest.Entities.Owners;
 
 import jakarta.persistence.*;
 import ru.isaev.cats.rest.Entities.Cats.Cat;
+import ru.isaev.cats.rest.Security.Roles;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -20,6 +21,10 @@ public class Owner {
 
     //TODO localedate. DONE
     private LocalDate birthday;
+
+    private String password;
+
+    private Roles role;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -46,6 +51,22 @@ public class Owner {
 
     public String getLast_name() {
         return last_name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Roles getRole() {
+        return role;
+    }
+
+    public void setRole(Roles role) {
+        this.role = role;
     }
 
     public Set<Cat> getCatsList() {

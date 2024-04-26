@@ -1,6 +1,10 @@
 package ru.isaev.cats.rest.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.isaev.cats.rest.Entities.Owners.Owner;
 import ru.isaev.cats.rest.DAO.IOwnerDAO;
@@ -13,12 +17,16 @@ import java.util.Optional;
 public class OwnerService {
 
     private final IOwnerDAO ownerDAO;
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
-    public OwnerService(IOwnerDAO ownerDAO) {
+    public OwnerService(IOwnerDAO ownerDAO, PasswordEncoder passwordEncoder) {
         this.ownerDAO = ownerDAO;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void addOwner(Owner owner) {
+        owner.setPassword(passwordEncoder.encode(owner.getPassword()));
         ownerDAO.save(owner);
     }
 

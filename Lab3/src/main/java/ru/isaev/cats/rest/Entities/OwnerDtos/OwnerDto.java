@@ -2,6 +2,7 @@ package ru.isaev.cats.rest.Entities.OwnerDtos;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ru.isaev.cats.rest.Security.Roles;
 
 import java.util.Set;
 
@@ -20,6 +21,26 @@ public class OwnerDto {
 
     @JsonProperty("idsOfCatsList")
     private Set<Long> idsOfCatsList;
+
+    private String password;
+
+    private Roles role;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Roles getRole() {
+        return role;
+    }
+
+    public void setRole(Roles role) {
+        this.role = role;
+    }
 
     public Set<Long> getIdsOfCatsList() {
         return idsOfCatsList;

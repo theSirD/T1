@@ -166,6 +166,8 @@ public class MyMapper implements IMyMapper {
         owner.setFirstName( ownerDto.getFirst_name() );
         owner.setLastName( ownerDto.getLast_name() );
         owner.setCatsList(null);
+        owner.setPassword(ownerDto.getPassword());
+        owner.setRole(ownerDto.getRole());
 
         return owner;
     }
