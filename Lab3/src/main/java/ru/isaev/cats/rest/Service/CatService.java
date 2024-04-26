@@ -13,10 +13,7 @@ import ru.isaev.cats.rest.Entities.Owners.Owner;
 import ru.isaev.cats.rest.Security.MyUserDetails;
 import ru.isaev.cats.rest.Utilities.Exceptions.CatNotFoundExceptions;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class CatService {
@@ -33,10 +30,10 @@ public class CatService {
         MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Owner currentOwner = currentPrincipal.getOwner();
 
-        Set<Cat> friendsOfNewCat = new HashSet<>();
+        List<Cat> friendsOfNewCat = new ArrayList<>();
         cat.setFriendsList(friendsOfNewCat);
         catDAO.save(cat);
-        Set<Cat> catsOfOwner = currentOwner.getCatsList();
+        List<Cat> catsOfOwner = currentOwner.getCatsList();
         for (Cat catOfOwner :
                 catsOfOwner) {
                 cat.addFriend(catOfOwner, true);
@@ -54,31 +51,73 @@ public class CatService {
 
     //TODO 20.4.24. advicecontroller. DONE
     public Cat getCatById(Long id) {
+        MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Owner currentOwner = currentPrincipal.getOwner();
 
         Cat cat = catDAO.findById(id).orElseThrow(
                 () -> new CatNotFoundExceptions("Not found cat with id = " + id));
+
+        if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId()))
+            cat = null;
 
 
         return cat;
     }
 
     public List<Cat> getCatsByColor(CatColors color) {
-        return catDAO.findByColor(color);
+        MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Owner currentOwner = currentPrincipal.getOwner();
+
+        List<Cat> catsOfCertainColor = new ArrayList<>();
+        for (Cat cat :
+                currentOwner.getCatsList()) {
+            if (cat.getColor() == color)
+                catsOfCertainColor.add(cat);
+        }
+
+        return catsOfCertainColor;
+    }
+
+    public List<Cat> getAllCats() {
+        MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Owner currentOwner = currentPrincipal.getOwner();
+
+        return currentOwner.getCatsList();
     }
 
     public List<Cat> getCatsByBreed(CatBreeds breed) {
-        return catDAO.findByBreed(breed);
+        MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Owner currentOwner = currentPrincipal.getOwner();
+
+        List<Cat> catsOfCertainBreed = new ArrayList<>();
+        for (Cat cat :
+                currentOwner.getCatsList()) {
+            if (cat.getBreed() == breed)
+                catsOfCertainBreed.add(cat);
+        }
+
+        return catsOfCertainBreed;
     }
 
     public void updateCat(Cat cat) {
+        MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Owner currentOwner = currentPrincipal.getOwner();
+
+        if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId()))
+            return;
+
         catDAO.save(cat);
     }
 
-    public void removeCat(Cat cat) {
-        catDAO.delete(cat);
-    }
-
     public void removeCatById(Long id) {
+        MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Owner currentOwner = currentPrincipal.getOwner();
+
+        Cat cat = catDAO.findById(id).orElseThrow(
+                () -> new CatNotFoundExceptions("No cat with id = " + id));
+
+        if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId()))
+            return;
         catDAO.deleteById(id);
     }
 }

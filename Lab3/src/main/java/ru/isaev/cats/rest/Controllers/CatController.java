@@ -35,6 +35,14 @@ public class CatController {
         );
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<CatDto>> getAll() {
+        return new ResponseEntity<>(
+                mapper.mapListOfCatsToListOfDtos(catService.getAllCats()),
+                HttpStatus.OK
+        );
+    }
+
     @GetMapping("/color")
     public ResponseEntity<List<CatDto>> getByColor(@RequestParam(name = "color", required = false) CatColors color) {
         return new ResponseEntity<>(
