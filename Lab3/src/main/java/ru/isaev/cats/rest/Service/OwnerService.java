@@ -47,7 +47,7 @@ public class OwnerService {
         MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Owner currentOwner = currentPrincipal.getOwner();
 
-        if (!Objects.equals(currentOwner.getId(), owner.getId()) && currentOwner.getRole() != Roles.ADMIN)
+        if (!Objects.equals(currentOwner.getId(), owner.getId()) && currentOwner.getRole() != Roles.ROLE_ADMIN)
             return;
 
         ownerDAO.save(owner);
@@ -57,7 +57,7 @@ public class OwnerService {
         MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Owner currentOwner = currentPrincipal.getOwner();
 
-        if (!Objects.equals(currentOwner.getId(), id)  && currentOwner.getRole() != Roles.ADMIN)
+        if (!Objects.equals(currentOwner.getId(), id)  && currentOwner.getRole() != Roles.ROLE_ADMIN)
             return;
 
         ownerDAO.deleteById(id);

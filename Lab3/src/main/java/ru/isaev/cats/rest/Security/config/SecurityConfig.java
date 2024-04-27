@@ -27,9 +27,6 @@ import ru.isaev.cats.rest.Security.MyUserDetailsService;
 public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
-//        UserDetails admin = User.builder().username("admin").password(encoder.encode("admin")).build();
-
-//        return new InMemoryUserDetailsManager((admin));
 
         return new MyUserDetailsService();
     }
@@ -39,7 +36,8 @@ public class SecurityConfig {
 
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/**").authenticated())
+                        .requestMatchers("owners/add").hasRole("ADMIN")
+                        .requestMatchers("/**").authenticated())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .build();

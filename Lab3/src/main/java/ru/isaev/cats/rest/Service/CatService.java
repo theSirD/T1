@@ -58,7 +58,7 @@ public class CatService {
         Cat cat = catDAO.findById(id).orElseThrow(
                 () -> new CatNotFoundExceptions("Not found cat with id = " + id));
 
-        if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId())  && currentOwner.getRole() != Roles.ADMIN)
+        if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId())  && currentOwner.getRole() != Roles.ROLE_ADMIN)
             cat = null;
 
 
@@ -69,7 +69,7 @@ public class CatService {
         MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Owner currentOwner = currentPrincipal.getOwner();
 
-        if ( currentOwner.getRole() == Roles.ADMIN) {
+        if ( currentOwner.getRole() == Roles.ROLE_ADMIN) {
             return catDAO.findByColor(color);
         }
 
@@ -87,7 +87,7 @@ public class CatService {
         MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Owner currentOwner = currentPrincipal.getOwner();
 
-        if ( currentOwner.getRole() == Roles.ADMIN) {
+        if ( currentOwner.getRole() == Roles.ROLE_ADMIN) {
             return catDAO.findAll();
         }
 
@@ -98,7 +98,7 @@ public class CatService {
         MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Owner currentOwner = currentPrincipal.getOwner();
 
-        if ( currentOwner.getRole() == Roles.ADMIN) {
+        if ( currentOwner.getRole() == Roles.ROLE_ADMIN) {
             return catDAO.findByBreed(breed);
         }
 
@@ -116,7 +116,7 @@ public class CatService {
         MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Owner currentOwner = currentPrincipal.getOwner();
 
-        if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId()) && currentOwner.getRole() != Roles.ADMIN)
+        if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId()) && currentOwner.getRole() != Roles.ROLE_ADMIN)
             return;
 
         catDAO.save(cat);
@@ -129,7 +129,7 @@ public class CatService {
         Cat cat = catDAO.findById(id).orElseThrow(
                 () -> new CatNotFoundExceptions("No cat with id = " + id));
 
-        if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId()) && currentOwner.getRole() != Roles.ADMIN)
+        if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId()) && currentOwner.getRole() != Roles.ROLE_ADMIN)
             return;
 
         catDAO.deleteById(id);
