@@ -13,6 +13,7 @@ import ru.isaev.cats.rest.Entities.Owners.Owner;
 import ru.isaev.cats.rest.Security.MyUserDetails;
 import ru.isaev.cats.rest.Security.Roles;
 import ru.isaev.cats.rest.Utilities.Exceptions.CatNotFoundExceptions;
+import ru.isaev.cats.rest.Utilities.Exceptions.NotYourCatException;
 
 import java.util.*;
 
@@ -59,7 +60,7 @@ public class CatService {
                 () -> new CatNotFoundExceptions("Not found cat with id = " + id));
 
         if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId())  && currentOwner.getRole() != Roles.ROLE_ADMIN)
-            cat = null;
+            throw new NotYourCatException("Not your cat with id = " + id);
 
 
         return cat;
@@ -117,7 +118,7 @@ public class CatService {
         Owner currentOwner = currentPrincipal.getOwner();
 
         if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId()) && currentOwner.getRole() != Roles.ROLE_ADMIN)
-            return;
+            throw new NotYourCatException("Not your cat with id = " + cat.getId());
 
         catDAO.save(cat);
     }
@@ -130,7 +131,7 @@ public class CatService {
                 () -> new CatNotFoundExceptions("No cat with id = " + id));
 
         if (!Objects.equals(cat.getOwner().getId(), currentOwner.getId()) && currentOwner.getRole() != Roles.ROLE_ADMIN)
-            return;
+            throw new NotYourCatException("Not your cat with id = " + cat.getId());
 
         catDAO.deleteById(id);
     }

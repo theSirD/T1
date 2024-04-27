@@ -23,7 +23,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import ru.isaev.cats.rest.Security.MyUserDetailsService;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = false)
 public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
