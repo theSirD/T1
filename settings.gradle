@@ -1,5 +1,12 @@
 include 'Lab1'
 include 'Lab2'
 include 'Lab3'
-include 'lab3_test'
+include 'Lab3:Controllers'
+findProject(':Lab3:Controllers')?.name = 'Controllers'
+include 'Lab3:DAO'
+findProject(':Lab3:DAO')?.name = 'DAO'
+include 'Lab3:Service'
+findProject(':Lab3:Service')?.name = 'Service'
+include 'Lab3:App'
+findProject(':Lab3:App')?.name = 'App'
 

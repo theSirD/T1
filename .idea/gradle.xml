@@ -12,7 +12,10 @@
             <option value="$PROJECT_DIR$/Lab1" />
             <option value="$PROJECT_DIR$/Lab2" />
             <option value="$PROJECT_DIR$/Lab3" />
-            <option value="$PROJECT_DIR$/lab3_test" />
+            <option value="$PROJECT_DIR$/Lab3/App" />
+            <option value="$PROJECT_DIR$/Lab3/Controllers" />
+            <option value="$PROJECT_DIR$/Lab3/DAO" />
+            <option value="$PROJECT_DIR$/Lab3/Service" />
           </set>
         </option>
       </GradleProjectSettings>
