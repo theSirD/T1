@@ -3,6 +3,7 @@ package ru.isaev.cats.rest.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.web.bind.annotation.*;
 import ru.isaev.cats.rest.Entities.CatDtos.CatDto;
 import ru.isaev.cats.rest.Entities.CatDtos.CatDtoInput;
@@ -36,6 +37,7 @@ public class CatController {
     }
 
     @GetMapping("/all")
+    @PostFilter("hasAuthority('ROLE_ADMIN') or authentication.name == filterObject.ownerId")
     public ResponseEntity<List<CatDto>> getAll() {
         return new ResponseEntity<>(
                 mapper.mapListOfCatsToListOfDtos(catService.getAllCats()),

@@ -7,6 +7,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.web.servlet.MockMvc;
 import ru.isaev.cats.rest.Controllers.CatController;
 import ru.isaev.cats.rest.Controllers.OwnerController;
 import ru.isaev.cats.rest.DAO.ICatDAO;
@@ -19,12 +26,16 @@ import ru.isaev.cats.rest.Entities.Mapper.IMyMapper;
 import ru.isaev.cats.rest.Entities.Mapper.MyMapper;
 import ru.isaev.cats.rest.Entities.OwnerDtos.OwnerDto;
 import ru.isaev.cats.rest.Entities.Owners.Owner;
+import ru.isaev.cats.rest.Security.MyUserDetails;
+import ru.isaev.cats.rest.Security.Roles;
 import ru.isaev.cats.rest.Service.CatService;
 import ru.isaev.cats.rest.Service.OwnerService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -36,6 +47,7 @@ import static org.mockito.Mockito.when;
 //TODO тесты для контроллеров. DONE
 @SpringBootTest(classes = Test.class)
 public class Tests {
+    private MockMvc mockMvc;
     @Mock
     private ICatDAO catDAO;
 
@@ -50,9 +62,37 @@ public class Tests {
 
     @Test
     public void testCatService() {
-        CatService catService = new CatService(catDAO);
+        Owner owner = new Owner();
+        owner.setId(1L);
+        owner.setFirstName("Daniel");
+        owner.setLastName("Isaev");
+        owner.setRole(Roles.ROLE_USER);
+        owner.setPassword("123");
+
+        String birthday = "2000-10-12";
+
+        try {
+            DateTimeFormatter formatter =
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(birthday, formatter);
+            owner.setBirthday(date);
+        }
+        catch (DateTimeParseException exc) {
+            System.out.printf("%s is not parsable!%n", birthday);
+            throw exc;
+        }
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                new MyUserDetails(owner), null,
+                AuthorityUtils.createAuthorityList("ROLE_USER"));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
+        CatService catService = new CatService(catDAO, ownerDAO);
         Cat cat = new Cat();
-        String birthday = "2004-10-12";
+        cat.setId(1L);
+        cat.setOwner(owner);
+        birthday = "2004-10-12";
 
         try {
             DateTimeFormatter formatter =
@@ -68,6 +108,10 @@ public class Tests {
         cat.setBreed(CatBreeds.BREED3);
         cat.setColor(CatColors.BLACK);
 
+        List<Cat> catsOfOwner = new ArrayList<>();
+        catsOfOwner.add(cat);
+        owner.setCatsList(catsOfOwner);
+
         when(catDAO.findById(1L)).thenReturn(Optional.of(cat));
 
         Cat catFromDb = catService.getCatById(1L);
@@ -75,9 +119,11 @@ public class Tests {
         assertNotNull(catFromDb);
     }
 
+
     @Test
     public void testOwnerService() {
-        OwnerService ownerService = new OwnerService(ownerDAO);
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        OwnerService ownerService = new OwnerService(ownerDAO, encoder);
         Owner owner = new Owner();
         owner.setFirstName("Daniel");
         owner.setLastName("Isaev");

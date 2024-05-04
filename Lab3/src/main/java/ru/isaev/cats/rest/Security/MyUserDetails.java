@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import ru.isaev.cats.rest.Entities.Owners.Owner;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
