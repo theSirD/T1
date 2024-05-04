@@ -9,4 +9,6 @@ include 'Lab3:Service'
 findProject(':Lab3:Service')?.name = 'Service'
 include 'Lab3:App'
 findProject(':Lab3:App')?.name = 'App'
+include 'Lab3:Domain'
+findProject(':Lab3:Domain')?.name = 'Domain'
 

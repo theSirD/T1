@@ -5,10 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.web.bind.annotation.*;
+import ru.isaev.Entities.CatDtos.CatDto;
+import ru.isaev.Entities.CatDtos.CatDtoInput;
 import ru.isaev.Service.CatService;
 import ru.isaev.Mapper.IMyMapper;
-import ru.isaev.Entities.CatDtos.*;
-import ru.isaev.Entities.Cats.*;
+import ru.isaev.Entities.Cats.Cat;
+import ru.isaev.Entities.Cats.CatBreeds;
+import ru.isaev.Entities.Cats.CatColors;
 
 import java.util.List;
 
