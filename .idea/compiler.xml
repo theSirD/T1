@@ -7,8 +7,14 @@
       <module name="theSirD.Lab3.Lab5.test" target="21" />
       <module name="theSirD.lab3_test.main" target="17" />
       <module name="theSirD.lab3_test.test" target="17" />
+      <module name="theSirD.Lab5.CatsMicroservice.main" target="21" />
+      <module name="theSirD.Lab5.CatsMicroservice.test" target="21" />
+      <module name="theSirD.Lab5.ClientMicroservice.main" target="21" />
+      <module name="theSirD.Lab5.ClientMicroservice.test" target="21" />
       <module name="theSirD.Lab5.main" target="21" />
       <module name="theSirD.Lab5.OwnerMicroservice" target="21" />
+      <module name="theSirD.Lab5.OwnersMicroservice.main" target="21" />
+      <module name="theSirD.Lab5.OwnersMicroservice.test" target="21" />
       <module name="theSirD.Lab5.test" target="21" />
     </bytecodeTargetLevel>
   </component>

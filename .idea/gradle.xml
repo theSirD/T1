@@ -19,8 +19,18 @@
             <option value="$PROJECT_DIR$/Lab3/Service" />
             <option value="$PROJECT_DIR$/Lab5" />
             <option value="$PROJECT_DIR$/Lab5/CatsMicroservice" />
+            <option value="$PROJECT_DIR$/Lab5/CatsMicroservice/App" />
+            <option value="$PROJECT_DIR$/Lab5/CatsMicroservice/Controller" />
+            <option value="$PROJECT_DIR$/Lab5/CatsMicroservice/Repository" />
+            <option value="$PROJECT_DIR$/Lab5/CatsMicroservice/Service" />
             <option value="$PROJECT_DIR$/Lab5/ClientMicroservice" />
+            <option value="$PROJECT_DIR$/Lab5/ClientMicroservice/App" />
+            <option value="$PROJECT_DIR$/Lab5/ClientMicroservice/Controller" />
             <option value="$PROJECT_DIR$/Lab5/OwnersMicroservice" />
+            <option value="$PROJECT_DIR$/Lab5/OwnersMicroservice/App" />
+            <option value="$PROJECT_DIR$/Lab5/OwnersMicroservice/Controller" />
+            <option value="$PROJECT_DIR$/Lab5/OwnersMicroservice/Repository" />
+            <option value="$PROJECT_DIR$/Lab5/OwnersMicroservice/Service" />
           </set>
         </option>
       </GradleProjectSettings>
