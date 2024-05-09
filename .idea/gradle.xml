@@ -17,6 +17,10 @@
             <option value="$PROJECT_DIR$/Lab3/DAO" />
             <option value="$PROJECT_DIR$/Lab3/Domain" />
             <option value="$PROJECT_DIR$/Lab3/Service" />
+            <option value="$PROJECT_DIR$/Lab5" />
+            <option value="$PROJECT_DIR$/Lab5/CatsMicroservice" />
+            <option value="$PROJECT_DIR$/Lab5/ClientMicroservice" />
+            <option value="$PROJECT_DIR$/Lab5/OwnersMicroservice" />
           </set>
         </option>
       </GradleProjectSettings>
