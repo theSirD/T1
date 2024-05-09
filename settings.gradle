@@ -38,4 +38,6 @@ include 'Lab5:CatsMicroservice:Repository'
 findProject(':Lab5:CatsMicroservice:Repository')?.name = 'Repository'
 include 'Lab5:ClientMicroservice:App'
 findProject(':Lab5:ClientMicroservice:App')?.name = 'App'
+include 'Lab5:Domain'
+findProject(':Lab5:Domain')?.name = 'Domain'
 
