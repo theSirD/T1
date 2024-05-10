@@ -5,14 +5,10 @@ import org.springframework.stereotype.Service;
 import ru.isaev.Cats.Cat;
 import ru.isaev.Cats.CatBreeds;
 import ru.isaev.Cats.CatColors;
-import ru.isaev.Owners.Owner;
-import ru.isaev.Owners.Roles;
 import ru.isaev.Utilities.Exceptions.CatNotFoundExceptions;
 
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class CatService {
@@ -63,8 +59,8 @@ public class CatService {
         return catRepository.findByBreed(breed);
     }
 
-    public void updateCat(Cat cat) {
-        catRepository.save(cat);
+    public Cat updateCat(Cat cat) {
+        return catRepository.saveAndFlush(cat);
     }
 
     public void removeCatById(Long id) {
