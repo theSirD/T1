@@ -1,12 +1,12 @@
-package ru.isaev.Repository;
+package ru.isaev;
 
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.isaev.Domain.Cats.Cat;
-import ru.isaev.Domain.Cats.CatBreeds;
-import ru.isaev.Domain.Cats.CatColors;
+import ru.isaev.Cats.Cat;
+import ru.isaev.Cats.CatBreeds;
+import ru.isaev.Cats.CatColors;
 
 import java.util.List;
 

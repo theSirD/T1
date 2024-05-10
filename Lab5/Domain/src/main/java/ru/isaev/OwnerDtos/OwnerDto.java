@@ -1,8 +1,8 @@
-package ru.isaev.Domain.OwnerDtos;
+package ru.isaev.OwnerDtos;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.isaev.Domain.Owners.Roles;
+import ru.isaev.Owners.Roles;
 
 import java.util.List;
 

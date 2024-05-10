@@ -1,12 +1,11 @@
-package ru.isaev.OwnersMicroservice;
+package ru.isaev;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OwnersMicroserviceApplication {
+public class ClientMicroserviceApplication {
     public static void main(String[] args) {
-        SpringApplication.run(OwnersMicroserviceApplication.class, args);
+        SpringApplication.run(ClientMicroserviceApplication.class, args);
     }
-
 }

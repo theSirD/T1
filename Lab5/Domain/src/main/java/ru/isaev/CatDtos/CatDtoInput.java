@@ -1,8 +1,8 @@
-package ru.isaev.Domain.CatDtos;
+package ru.isaev.CatDtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.isaev.Domain.Cats.CatBreeds;
-import ru.isaev.Domain.Cats.CatColors;
+import ru.isaev.Cats.CatBreeds;
+import ru.isaev.Cats.CatColors;
 
 public class CatDtoInput {
     @JsonProperty("id")

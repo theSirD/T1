@@ -1,4 +1,4 @@
-package ru.isaev.Domain.Owners;
+package ru.isaev.Owners;
 
 public enum Roles {
     ROLE_ADMIN,

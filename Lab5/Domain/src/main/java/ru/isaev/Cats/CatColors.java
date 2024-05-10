@@ -1,4 +1,4 @@
-package ru.isaev.Domain.Cats;
+package ru.isaev.Cats;
 
 public enum CatColors {
     BLACK,

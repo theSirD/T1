@@ -1,4 +1,4 @@
-package ru.isaev.Domain.OwnerDtos;
+package ru.isaev.OwnerDtos;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

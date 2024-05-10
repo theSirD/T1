@@ -1,7 +1,7 @@
-package ru.isaev.Domain.Cats;
+package ru.isaev.Cats;
 
 import jakarta.persistence.*;
-import ru.isaev.Domain.Owners.Owner;
+import ru.isaev.Owners.Owner;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
