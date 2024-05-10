@@ -1,4 +1,4 @@
-package ru.isaev.Kafka;
+package ru.isaev;
 
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
