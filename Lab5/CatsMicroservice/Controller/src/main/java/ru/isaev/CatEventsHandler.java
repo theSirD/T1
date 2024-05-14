@@ -1,5 +1,7 @@
 package ru.isaev;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,21 +47,27 @@ public class CatEventsHandler {
 //    }
 
     @KafkaListener(topics = "topic-get-cat-by-id")
-    void getCatByIdHandler(Long id) {
+    void getCatByIdHandler(Long id) throws JsonProcessingException {
         logger.info("Trying to get cat with id: {}", id);
 
         CatDto cat = mapper.catToCatDto(catService.getCatById(id));
+//        ObjectMapper objectMapper = new ObjectMapper();
+
+//        String json = objectMapper.writeValueAsString(cat);
 
         kafkaTemplate.send("topic-cat-response", cat);
     }
 
     @KafkaListener(topics = "topic-get-cats-by-color")
-    void getCatsByColorHandler(CatColors catColor) {
-        logger.info("Trying to get cat with colors: {}", catColor);
+    void getCatsByColorHandler(int index) throws JsonProcessingException {
+        logger.info("Trying to get cat with colors: {}", CatColors.values()[(int)  index]);
 
-        List<CatDto> listOfDtos = mapper.mapListOfCatsToListOfDtos(catService.getCatsByColor(catColor));
+        List<CatDto> listOfDtos = mapper.mapListOfCatsToListOfDtos(catService.getCatsByColor(CatColors.values()[(int) (long) index]));
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        kafkaTemplate.send("topic-list-of-cats-response", listOfDtos);
+        String jsonArray = objectMapper.writeValueAsString(listOfDtos);
+
+        kafkaTemplate.send("topic-list-of-cats-response", jsonArray);
     }
 
     @KafkaListener(topics = "topic-get-all-cats")
