@@ -9,10 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 import ru.isaev.CatDtos.CatDto;
-import ru.isaev.CatRequestDtos.RequestAllDto;
-import ru.isaev.CatRequestDtos.RequestByBreedDto;
-import ru.isaev.CatRequestDtos.RequestByColorDto;
-import ru.isaev.CatRequestDtos.RequestByIdDto;
+import ru.isaev.CatDtos.CatDtoInput;
+import ru.isaev.CatRequestDtos.*;
 import ru.isaev.Cats.CatBreeds;
 import ru.isaev.Cats.CatColors;
 import ru.isaev.Requests.Request;
@@ -103,37 +101,34 @@ public class CatController {
 //        return ResponseEntity.status(HttpStatus.CREATED).body(catDtoInput);
 //    }
 //
-//    // TODO. Требуется доработка
-//    @PutMapping("/edit")
-//    public ResponseEntity<CatDto> updateCat(@RequestBody CatDtoInput catDtoInput) throws JsonProcessingException {
-//        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-//        String json = ow.writeValueAsString(catDtoInput);
-//
-//        kafkaTemplate.send("topic-update-cat", json);
-//
-//        consumer.seekToEnd(partitions);
-//        ConsumerRecords<String, Object> records = consumer.poll(Duration.ofSeconds(5));
-//
-//        CatDto cat = null;
-//        logger.info("Yo" + String.valueOf(records.count()));
-//        for (ConsumerRecord<String, Object> record : records) {
-//            String jsonOutput = (String) record.value();
-//            cat = objectMapper.readValue(jsonOutput, CatDto.class);
-////            cat = (CatDto) record.value();
-//            logger.info("Id of cat: ");
-//            logger.info(cat.getId().toString());
-//        }
-//
-//        // TODO. Тут тоже надо вернуть кота с id
-//        return ResponseEntity.status(HttpStatus.OK).body(cat);
-//    }
+//    // TODO. Требуется доработка (после обновления часть полей становится null)
+    @PutMapping("/edit")
+    public ResponseEntity<String> updateCat(@RequestBody CatDtoInput catDtoInput) throws JsonProcessingException {
+        Request request = requestResponseService.addRequest();
+        RequestWithInputDtoDto requestWithInputDtoDto = new RequestWithInputDtoDto(request.getId(), catDtoInput);
+
+        String json = mapper.writeValueAsString(requestWithInputDtoDto);
+        kafkaTemplate.send("topic-update-cat", json);
+
+        return new ResponseEntity<>(
+                "Try to get cats here: /cats/request/" + request.getId(),
+                HttpStatus.ACCEPTED
+        );
+    }
 
     // TODO. Допиши
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteCatById(@PathVariable Long id) {
-        kafkaTemplate.send("topic-delete-cat-by-id", id);
+    public ResponseEntity<String> deleteCatById(@PathVariable Long id) throws JsonProcessingException {
+        Request request = requestResponseService.addRequest();
+        RequestByIdDto requestByIdDto = new RequestByIdDto(request.getId(), id);
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        String json = mapper.writeValueAsString(requestByIdDto);
+        kafkaTemplate.send("topic-delete-cat-by-id", json);
+
+        return new ResponseEntity<>(
+                "Try to get cat here: /cats/request/" + request.getId(),
+                HttpStatus.ACCEPTED
+        );
     }
 
 
