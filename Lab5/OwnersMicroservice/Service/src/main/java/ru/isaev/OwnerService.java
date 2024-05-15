@@ -37,11 +37,11 @@ public class OwnerService {
         return owner;
     }
 
-    public void updateOwner(Owner owner) {
+    public Owner updateOwner(Owner owner) {
 //        if (!Objects.equals(currentOwner.getId(), owner.getId()) && currentOwner.getRole() != Roles.ROLE_ADMIN)
 //            throw new NotYourProfileException("Not your profile with id = " + owner.getId());
 
-        ownerDAO.save(owner);
+        return ownerDAO.saveAndFlush(owner);
     }
 
     public void removeOwnerById(Long id) {
