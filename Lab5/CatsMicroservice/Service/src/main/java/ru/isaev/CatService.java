@@ -19,7 +19,7 @@ public class CatService {
         this.catRepository = catRepository;
     }
 
-    // TODO. Добавь логику сохранения кота
+    // TODO. Добавь логику сохранения кота (асинхронная, по гайду https://www.youtube.com/watch?v=mB91hPd2xmM&list=PLt91xr-Pp57T4kKLdavnQ0gV1X427frC2&index=15&t=1092s)
     public void addCat(Cat cat) {
 //        List<Cat> friendsOfNewCat = new ArrayList<>();
 //        cat.setFriendsList(friendsOfNewCat);

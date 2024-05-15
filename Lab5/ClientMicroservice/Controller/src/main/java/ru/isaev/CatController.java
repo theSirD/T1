@@ -2,7 +2,6 @@ package ru.isaev;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -131,8 +130,6 @@ public class CatController {
         );
     }
 
-
-    // TODO. ДОпиши
     @GetMapping("/request/{id}")
     public ResponseEntity<?> getByRequestId(@PathVariable Long id) {
         Request request = requestResponseService.getRequestById(id);
@@ -145,7 +142,7 @@ public class CatController {
             );
         }
 
-        CatResponse response = requestResponseService.getResponseById(id);
+        CatResponse response = requestResponseService.getCatResponseById(id);
         List<CatDto> cats = response.getCatsList();
 
         return new ResponseEntity<>(

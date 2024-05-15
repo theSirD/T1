@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.isaev.Responses.CatResponse;
 
 @Repository
-public interface ResponseRepository extends JpaRepository<CatResponse, Long> {
+public interface CatResponseRepository extends JpaRepository<CatResponse, Long> {
 }

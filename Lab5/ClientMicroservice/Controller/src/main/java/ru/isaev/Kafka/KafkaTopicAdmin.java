@@ -42,12 +42,23 @@ public class KafkaTopicAdmin {
         return TopicBuilder.name("topic-delete-cat-by-id").build();
     }
 
-
-
-
+    @Bean
+    public NewTopic addOwnerTopic() {
+        return TopicBuilder.name("topic-add-owner").build();
+    }
 
     @Bean
-    public NewTopic ownersTopic() {
-        return TopicBuilder.name("topic-owners").build();
+    public NewTopic getOwnerByIdTopic() {
+        return TopicBuilder.name("topic-get-owner-by-id").build();
+    }
+
+    @Bean
+    public NewTopic updateOwnerTopic() {
+        return TopicBuilder.name("topic-update-owner").build();
+    }
+
+    @Bean
+    public NewTopic deleteOwnerByIdTopic() {
+        return TopicBuilder.name("topic-delete-owner-by-id").build();
     }
 }
