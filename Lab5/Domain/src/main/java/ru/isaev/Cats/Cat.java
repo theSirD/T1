@@ -13,10 +13,8 @@ public class Cat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    //TODO localedate. DONE
     private LocalDate birthday;
-    //TODO enum. DONE
+
     private CatBreeds breed;
 
     private CatColors color;

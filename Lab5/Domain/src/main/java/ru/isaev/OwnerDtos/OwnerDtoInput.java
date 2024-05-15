@@ -16,6 +16,16 @@ public class OwnerDtoInput {
     @JsonProperty("last_name")
     private String last_name;
 
+    public OwnerDtoInput() {
+    }
+
+    public OwnerDtoInput(Long id, String birthday, String first_name, String last_name) {
+        this.id = id;
+        this.birthday = birthday;
+        this.first_name = first_name;
+        this.last_name = last_name;
+    }
+
     public Long getId() {
         return id;
     }

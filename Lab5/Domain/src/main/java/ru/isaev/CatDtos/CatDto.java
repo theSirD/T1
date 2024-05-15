@@ -1,13 +1,18 @@
 package ru.isaev.CatDtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Basic;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import ru.isaev.Cats.CatBreeds;
 import ru.isaev.Cats.CatColors;
 
 import java.util.List;
 
+@Entity
 public class CatDto {
-    @JsonProperty("id")
+    @Id
     private Long id;
 
     @JsonProperty("ownerId")
@@ -23,7 +28,20 @@ public class CatDto {
     private CatBreeds breed;
 
     @JsonProperty("idsOfFriendsList")
-    private List<Long> friends;
+    @ElementCollection
+    private List<Long> idsOfFriendsList;
+
+    public CatDto() {
+    }
+
+    public CatDto(Long id, Long ownerId, String birthday, CatColors color, CatBreeds breed, List<Long> idsOfFriendsList) {
+        this.id = id;
+        this.ownerId = ownerId;
+        this.birthday = birthday;
+        this.color = color;
+        this.breed = breed;
+        this.idsOfFriendsList = idsOfFriendsList;
+    }
 
     public Long getId() {
         return id;
@@ -66,10 +84,10 @@ public class CatDto {
     }
 
     public List<Long> getFriends() {
-        return friends;
+        return idsOfFriendsList;
     }
 
-    public void setFriends(List<Long> friends) {
-        this.friends = friends;
+    public void setFriends(List<Long> idsOfFriendsList) {
+        this.idsOfFriendsList = idsOfFriendsList;
     }
 }

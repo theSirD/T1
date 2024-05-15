@@ -1,6 +1,9 @@
 package ru.isaev.CatDtos;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.isaev.Cats.CatBreeds;
 import ru.isaev.Cats.CatColors;
 
@@ -17,6 +20,28 @@ public class CatDtoInput {
     @JsonProperty("breed")
     private CatBreeds breed;
 
+    public CatDtoInput() {
+    }
+
+    public CatDtoInput(Long id, String birthday, CatColors color, CatBreeds breed) {
+        this.id = id;
+        this.birthday = birthday;
+        this.color = color;
+        this.breed = breed;
+    }
+
+
+    @JsonCreator
+    public static CatDtoInput Create(String jsonString) throws JsonProcessingException {
+
+        CatDtoInput cat = null;
+
+        ObjectMapper mapper = new ObjectMapper();
+        cat = mapper.readValue(jsonString, CatDtoInput.class);
+
+
+        return cat;
+    }
 
     public Long getId() {
         return id;

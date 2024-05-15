@@ -22,6 +22,19 @@ public class OwnerDto {
     @JsonProperty("idsOfCatsList")
     private List<Long> idsOfCatsList;
 
+    public OwnerDto() {
+    }
+
+    public OwnerDto(Long id, String birthday, String first_name, String last_name, List<Long> idsOfCatsList, String password, Roles role) {
+        this.id = id;
+        this.birthday = birthday;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.idsOfCatsList = idsOfCatsList;
+        this.password = password;
+        this.role = role;
+    }
+
     private String password;
 
     private Roles role;
