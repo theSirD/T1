@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 import ru.isaev.CatDtos.CatDto;
+import ru.isaev.CatRequestDtos.RequestAllDto;
 import ru.isaev.CatRequestDtos.RequestByIdDto;
 import ru.isaev.Requests.Request;
 import ru.isaev.Requests.RequestStatus;
@@ -24,6 +25,8 @@ public class CatController {
 
     private RequestResponseService requestResponseService;
 
+    private ObjectMapper mapper = new ObjectMapper();
+
     @Autowired
     public CatController(KafkaTemplate<String, Object> kafkaTemplate, RequestResponseService requestResponseService) {
         this.kafkaTemplate = kafkaTemplate;
@@ -35,9 +38,7 @@ public class CatController {
         Request request = requestResponseService.addRequest();
         RequestByIdDto requestByIdDto = new RequestByIdDto(request.getId(), id);
 
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(requestByIdDto);
-
+        String json = mapper.writeValueAsString(requestByIdDto);
         kafkaTemplate.send("topic-get-cat-by-id", json);
 
         return new ResponseEntity<>(
@@ -46,28 +47,21 @@ public class CatController {
         );
     }
 
-//    @GetMapping("/all")
-////    @PostFilter("hasAuthority('ROLE_ADMIN') or authentication.name == filterObject.ownerId")
-//    public ResponseEntity<List<CatDto>> getAll() throws JsonProcessingException {
-//
-//        // TODO. А тут что отправлять?
-//        kafkaTemplate.send("topic-get-all-cats", "tmp");
-//
-//        ConsumerRecords<String, Object> records = consumer.poll(Duration.ofSeconds(5));
-//
-//        List<CatDto> cats = null;
-//        logger.info("Yo" + String.valueOf(records.count()));
-//        for (ConsumerRecord<String, Object> record : records) {
-//            String value = (String) record.value();
-//            cats = objectMapper.readValue(value, new TypeReference<List<CatDto>>(){});
-//        }
-//
-//        return new ResponseEntity<>(
-//                cats,
-//                HttpStatus.OK
-//        );
-//    }
-//
+    @GetMapping("/all")
+//    @PostFilter("hasAuthority('ROLE_ADMIN') or authentication.name == filterObject.ownerId")
+    public ResponseEntity<String> getAll() throws JsonProcessingException {
+        Request request = requestResponseService.addRequest();
+        RequestAllDto requestAllDto = new RequestAllDto(request.getId());
+
+        String json = mapper.writeValueAsString(requestAllDto);
+        kafkaTemplate.send("topic-get-all-cats", json);
+
+        return new ResponseEntity<>(
+                "Try to get cats here: /cats/request/" + request.getId(),
+                HttpStatus.ACCEPTED
+        );
+    }
+
 //    @GetMapping("/color")
 //    public ResponseEntity<List<CatDto>> getByColor(@RequestParam(name = "color", required = false) CatColors color) throws JsonProcessingException {
 //        kafkaTemplate.send("topic-get-cats-by-color", color.ordinal());

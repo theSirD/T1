@@ -49,9 +49,15 @@ public class RequestResponseService {
         requestRepository.save(request);
     }
 
+    public CatResponse getResponseById(Long id) {
+        return responseRepository.findById(id).orElseThrow(() -> new ResponseNotFoundException("Not found response with id = " + id));
+    }
+
     // TODO. Без groupId этот метод не работает. Почему?
-    @KafkaListener(topics = "topic-cat-response", groupId = "group-id")
+    @KafkaListener(topics = "topic-cat-response",
+                    groupId = "group-id")
     void getCatResponse(String catResponseJson) throws JsonProcessingException {
+        logger.info(catResponseJson);
         CatResponse catResponse = objectMapper.readValue(catResponseJson, CatResponse.class);
         logger.info("Service: Trying to get cat response");
 
@@ -65,9 +71,5 @@ public class RequestResponseService {
         }
 
         responseRepository.save(catResponse);
-    }
-
-    public CatResponse getResponseById(Long id) {
-        return responseRepository.findById(id).orElseThrow(() -> new ResponseNotFoundException("Not found response with id = " + id));
     }
 }

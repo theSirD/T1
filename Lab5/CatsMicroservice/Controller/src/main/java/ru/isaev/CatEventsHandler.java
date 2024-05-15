@@ -11,6 +11,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import ru.isaev.CatDtos.CatDto;
 import ru.isaev.CatDtos.CatDtoInput;
+import ru.isaev.CatRequestDtos.RequestAllDto;
 import ru.isaev.CatRequestDtos.RequestByIdDto;
 import ru.isaev.Cats.Cat;
 import ru.isaev.Cats.CatBreeds;
@@ -67,6 +68,20 @@ public class CatEventsHandler {
         kafkaTemplate.send("topic-cat-response", catResponseJson);
     }
 
+    // TODO. Требуется доарботка
+    @KafkaListener(topics = "topic-get-all-cats")
+    void getAllCatsHandler(String requestAllJson) throws JsonProcessingException {
+        RequestAllDto requestAll = objectMapper.readValue(requestAllJson, RequestAllDto.class);
+        logger.info("Trying to get all cats");
+
+        List<CatDto> listOfCats= mapper.mapListOfCatsToListOfDtos(catService.getAllCats());
+
+        CatResponse catResponse = new CatResponse(requestAll.getId(), listOfCats);
+        String catResponseJson = objectMapper.writeValueAsString(catResponse);
+
+        kafkaTemplate.send("topic-cat-response", catResponseJson);
+    }
+
     @KafkaListener(topics = "topic-get-cats-by-color")
     void getCatsByColorHandler(int index) throws JsonProcessingException {
         logger.info("Trying to get cat with colors: {}", CatColors.values()[index]);
@@ -75,19 +90,7 @@ public class CatEventsHandler {
 
         String jsonArray = objectMapper.writeValueAsString(listOfDtos);
 
-        kafkaTemplate.send("topic-list-of-cats-response", jsonArray);
-    }
-
-    // TODO. Требуется доарботка
-    @KafkaListener(topics = "topic-get-all-cats")
-    void getAllCatsHandler(String tmp) throws JsonProcessingException {
-        logger.info("Trying to get all cats");
-
-        List<CatDto> listOfDtos = mapper.mapListOfCatsToListOfDtos(catService.getAllCats());
-
-        String jsonArray = objectMapper.writeValueAsString(listOfDtos);
-
-        kafkaTemplate.send("topic-list-of-cats-response", jsonArray);
+        kafkaTemplate.send("topic-cat-response", jsonArray);
     }
 
     @KafkaListener(topics = "topic-get-cats-by-breed")
@@ -98,7 +101,7 @@ public class CatEventsHandler {
 
         String jsonArray = objectMapper.writeValueAsString(listOfDtos);
 
-        kafkaTemplate.send("topic-list-of-cats-response", jsonArray);
+        kafkaTemplate.send("topic-cat-response", jsonArray);
     }
 
     // TODO. Требуется доработка
