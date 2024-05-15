@@ -8,32 +8,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import ru.isaev.CatDtos.CatDto;
+import ru.isaev.OwnerDtos.OwnerDto;
 import ru.isaev.Requests.Request;
 import ru.isaev.Requests.RequestStatus;
 import ru.isaev.Responses.CatResponse;
+import ru.isaev.Responses.OwnerResponse;
 import ru.isaev.Utilities.Exceptions.RequestNotFoundExceptions;
 import ru.isaev.Utilities.Exceptions.ResponseNotFoundException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class RequestResponseService {
     private RequestRepository requestRepository;
 
-    private ResponseRepository responseRepository;
+    private CatResponseRepository catResponseRepository;
+
+    private OwnerResponseRepository ownerResponseRepository;
 
     private CatDtoRepository catDtoRepository;
+
+    private OwnerDtoRepository ownerDtoRepository;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public RequestResponseService(RequestRepository requestRepository, ResponseRepository responseRepository, CatDtoRepository catDtoRepository) {
+    public RequestResponseService(RequestRepository requestRepository, CatResponseRepository catResponseRepository, OwnerResponseRepository ownerResponseRepository, CatDtoRepository catDtoRepository, OwnerDtoRepository ownerDtoRepository) {
         this.requestRepository = requestRepository;
-        this.responseRepository = responseRepository;
+        this.catResponseRepository = catResponseRepository;
+        this.ownerResponseRepository = ownerResponseRepository;
         this.catDtoRepository = catDtoRepository;
+        this.ownerDtoRepository = ownerDtoRepository;
     }
 
     public Request addRequest() {
@@ -49,8 +56,12 @@ public class RequestResponseService {
         requestRepository.save(request);
     }
 
-    public CatResponse getResponseById(Long id) {
-        return responseRepository.findById(id).orElseThrow(() -> new ResponseNotFoundException("Not found response with id = " + id));
+    public CatResponse getCatResponseById(Long id) {
+        return catResponseRepository.findById(id).orElseThrow(() -> new ResponseNotFoundException("Not found response with id = " + id));
+    }
+
+    public OwnerResponse getOwnerResponseById(Long id) {
+        return ownerResponseRepository.findById(id).orElseThrow(() -> new ResponseNotFoundException("Not found response with id = " + id));
     }
 
     // TODO. Без groupId этот метод не работает. Почему?
@@ -70,6 +81,26 @@ public class RequestResponseService {
             catDtoRepository.save(cat);
         }
 
-        responseRepository.save(catResponse);
+        catResponseRepository.save(catResponse);
+    }
+
+    // TODO. Без groupId этот метод не работает. Почему?
+    @KafkaListener(topics = "topic-owner-response",
+            groupId = "group-id")
+    void getOwnerResponse(String ownerResponseJson) throws JsonProcessingException {
+        logger.info(ownerResponseJson);
+        OwnerResponse ownerResponse = objectMapper.readValue(ownerResponseJson, OwnerResponse.class);
+        logger.info("Service: Trying to get owner response");
+
+        Request request = new Request(ownerResponse.getRequestId(), RequestStatus.COMPLETED);
+        updateRequest(request);
+
+        List<OwnerDto> requestedOwnersList = ownerResponse.getOwnersList();
+        for (OwnerDto ownerDto :
+                requestedOwnersList) {
+            ownerDtoRepository.save(ownerDto);
+        }
+
+        ownerResponseRepository.save(ownerResponse);
     }
 }
