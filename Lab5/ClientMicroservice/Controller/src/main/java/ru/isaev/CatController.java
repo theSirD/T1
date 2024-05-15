@@ -10,7 +10,11 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 import ru.isaev.CatDtos.CatDto;
 import ru.isaev.CatRequestDtos.RequestAllDto;
+import ru.isaev.CatRequestDtos.RequestByBreedDto;
+import ru.isaev.CatRequestDtos.RequestByColorDto;
 import ru.isaev.CatRequestDtos.RequestByIdDto;
+import ru.isaev.Cats.CatBreeds;
+import ru.isaev.Cats.CatColors;
 import ru.isaev.Requests.Request;
 import ru.isaev.Requests.RequestStatus;
 import ru.isaev.Responses.CatResponse;
@@ -62,47 +66,33 @@ public class CatController {
         );
     }
 
-//    @GetMapping("/color")
-//    public ResponseEntity<List<CatDto>> getByColor(@RequestParam(name = "color", required = false) CatColors color) throws JsonProcessingException {
-//        kafkaTemplate.send("topic-get-cats-by-color", color.ordinal());
-//
-//        consumer.seekToEnd(partitions);
-//
-//        ConsumerRecords<String, Object> records = consumer.poll(Duration.ofSeconds(5));
-//
-//        List<CatDto> cats = null;
-//        logger.info("Yo" + String.valueOf(records.count()));
-//        for (ConsumerRecord<String, Object> record : records) {
-//            String value = (String) record.value();
-//            cats = objectMapper.readValue(value, new TypeReference<List<CatDto>>(){});
-//        }
-//
-//        return new ResponseEntity<>(
-//                cats,
-//                HttpStatus.OK
-//        );
-//    }
-//
-//    @GetMapping("/breed")
-//    public ResponseEntity<List<CatDto>> getByBreed(@RequestParam(name = "breed", required = false) CatBreeds breed) throws JsonProcessingException {
-//        kafkaTemplate.send("topic-get-cats-by-color", breed.ordinal());
-//
-//        consumer.seekToEnd(partitions);
-//
-//        ConsumerRecords<String, Object> records = consumer.poll(Duration.ofSeconds(5));
-//
-//        List<CatDto> cats = null;
-//        logger.info("Yo" + String.valueOf(records.count()));
-//        for (ConsumerRecord<String, Object> record : records) {
-//            String value = (String) record.value();
-//            cats = objectMapper.readValue(value, new TypeReference<List<CatDto>>(){});
-//        }
-//
-//        return new ResponseEntity<>(
-//                cats,
-//                HttpStatus.OK
-//        );
-//    }
+    @GetMapping("/color")
+    public ResponseEntity<String> getByColor(@RequestParam(name = "color", required = false) CatColors color) throws JsonProcessingException {
+        Request request = requestResponseService.addRequest();
+        RequestByColorDto requestByColorDto = new RequestByColorDto(request.getId(), color);
+
+        String json = mapper.writeValueAsString(requestByColorDto);
+        kafkaTemplate.send("topic-get-cats-by-color", json);
+
+        return new ResponseEntity<>(
+                "Try to get cats here: /cats/request/" + request.getId(),
+                HttpStatus.ACCEPTED
+        );
+    }
+
+    @GetMapping("/breed")
+    public ResponseEntity<String> getByBreed(@RequestParam(name = "breed", required = false) CatBreeds breed) throws JsonProcessingException {
+        Request request = requestResponseService.addRequest();
+        RequestByBreedDto requestByBreedDto = new RequestByBreedDto(request.getId(), breed);
+
+        String json = mapper.writeValueAsString(requestByBreedDto);
+        kafkaTemplate.send("topic-get-cats-by-breed", json);
+
+        return new ResponseEntity<>(
+                "Try to get cats here: /cats/request/" + request.getId(),
+                HttpStatus.ACCEPTED
+        );
+    }
 //
 //    // TODO. Допиши
 //    @PostMapping("/add")

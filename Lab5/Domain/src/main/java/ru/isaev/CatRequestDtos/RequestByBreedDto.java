@@ -1,5 +1,8 @@
 package ru.isaev.CatRequestDtos;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.isaev.Cats.CatBreeds;
 
 public class RequestByBreedDto {
@@ -13,6 +16,18 @@ public class RequestByBreedDto {
     public RequestByBreedDto(Long id, CatBreeds breeds) {
         this.id = id;
         this.breeds = breeds;
+    }
+
+    @JsonCreator
+    public static RequestByBreedDto Create(String jsonString) throws JsonProcessingException {
+
+        RequestByBreedDto requestDto = null;
+
+        ObjectMapper mapper = new ObjectMapper();
+        requestDto = mapper.readValue(jsonString, RequestByBreedDto.class);
+
+
+        return requestDto;
     }
 
     public Long getId() {

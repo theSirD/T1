@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import ru.isaev.CatDtos.CatDto;
 import ru.isaev.CatDtos.CatDtoInput;
 import ru.isaev.CatRequestDtos.RequestAllDto;
+import ru.isaev.CatRequestDtos.RequestByBreedDto;
+import ru.isaev.CatRequestDtos.RequestByColorDto;
 import ru.isaev.CatRequestDtos.RequestByIdDto;
 import ru.isaev.Cats.Cat;
 import ru.isaev.Cats.CatBreeds;
@@ -83,25 +85,29 @@ public class CatEventsHandler {
     }
 
     @KafkaListener(topics = "topic-get-cats-by-color")
-    void getCatsByColorHandler(int index) throws JsonProcessingException {
-        logger.info("Trying to get cat with colors: {}", CatColors.values()[index]);
+    void getCatsByColorHandler(String requestByColorJson) throws JsonProcessingException {
+        RequestByColorDto requestByColor = objectMapper.readValue(requestByColorJson, RequestByColorDto.class);
+        logger.info("Trying to get cats by color");
 
-        List<CatDto> listOfDtos = mapper.mapListOfCatsToListOfDtos(catService.getCatsByColor(CatColors.values()[(int) (long) index]));
+        List<CatDto> listOfCats= mapper.mapListOfCatsToListOfDtos(catService.getCatsByColor(requestByColor.getColor()));
 
-        String jsonArray = objectMapper.writeValueAsString(listOfDtos);
+        CatResponse catResponse = new CatResponse(requestByColor.getId(), listOfCats);
+        String catResponseJson = objectMapper.writeValueAsString(catResponse);
 
-        kafkaTemplate.send("topic-cat-response", jsonArray);
+        kafkaTemplate.send("topic-cat-response", catResponseJson);
     }
 
     @KafkaListener(topics = "topic-get-cats-by-breed")
-    void getCatsByBreedHandler(int index) throws JsonProcessingException {
-        logger.info("Trying to get cat with breed: {}", CatBreeds.values()[index]);
+    void getCatsByBreedHandler(String requestByBreedJson) throws JsonProcessingException {
+        RequestByBreedDto requestByBreedDto = objectMapper.readValue(requestByBreedJson, RequestByBreedDto.class);
+        logger.info("Trying to get cats by color");
 
-        List<CatDto> listOfDtos = mapper.mapListOfCatsToListOfDtos(catService.getCatsByBreed(CatBreeds.values()[(int) (long) index]));
+        List<CatDto> listOfCats= mapper.mapListOfCatsToListOfDtos(catService.getCatsByBreed(requestByBreedDto.getBreeds()));
 
-        String jsonArray = objectMapper.writeValueAsString(listOfDtos);
+        CatResponse catResponse = new CatResponse(requestByBreedDto.getId(), listOfCats);
+        String catResponseJson = objectMapper.writeValueAsString(catResponse);
 
-        kafkaTemplate.send("topic-cat-response", jsonArray);
+        kafkaTemplate.send("topic-cat-response", catResponseJson);
     }
 
     // TODO. Требуется доработка
