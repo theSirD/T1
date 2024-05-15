@@ -2,6 +2,7 @@ package ru.isaev;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,14 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import ru.isaev.CatDtos.CatDto;
 import ru.isaev.CatDtos.CatDtoInput;
+import ru.isaev.CatRequestDtos.RequestByIdDto;
 import ru.isaev.Cats.Cat;
 import ru.isaev.Cats.CatBreeds;
 import ru.isaev.Cats.CatColors;
 import ru.isaev.Mapper.IMyMapper;
+import ru.isaev.Responses.CatResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -27,6 +31,8 @@ public class CatEventsHandler {
     private final CatService catService;
 
     private final IMyMapper mapper;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public CatEventsHandler(KafkaTemplate<String, Object> kafkaTemplate, CatService catService, IMyMapper mapper) {
@@ -47,57 +53,72 @@ public class CatEventsHandler {
 //    }
 
     @KafkaListener(topics = "topic-get-cat-by-id")
-    void getCatByIdHandler(Long id) throws JsonProcessingException {
-        logger.info("Trying to get cat with id: {}", id);
+    void getCatByIdHandler(String requestByIdJson) throws JsonProcessingException {
+        RequestByIdDto requestById = objectMapper.readValue(requestByIdJson, RequestByIdDto.class);
+        logger.info("Trying to get cat with id: {}", requestById.getCatId());
 
-        CatDto cat = mapper.catToCatDto(catService.getCatById(id));
-//        ObjectMapper objectMapper = new ObjectMapper();
+        CatDto cat = mapper.catToCatDto(catService.getCatById(requestById.getCatId()));
 
-//        String json = objectMapper.writeValueAsString(cat);
+        List<CatDto> listOfCats = new ArrayList<>();
+        listOfCats.add(cat);
 
-        kafkaTemplate.send("topic-cat-response", cat);
+        CatResponse catResponse = new CatResponse(requestById.getId(), listOfCats);
+        String catResponseJson = objectMapper.writeValueAsString(catResponse);
+        kafkaTemplate.send("topic-cat-response", catResponseJson);
     }
 
     @KafkaListener(topics = "topic-get-cats-by-color")
     void getCatsByColorHandler(int index) throws JsonProcessingException {
-        logger.info("Trying to get cat with colors: {}", CatColors.values()[(int)  index]);
+        logger.info("Trying to get cat with colors: {}", CatColors.values()[index]);
 
         List<CatDto> listOfDtos = mapper.mapListOfCatsToListOfDtos(catService.getCatsByColor(CatColors.values()[(int) (long) index]));
-        ObjectMapper objectMapper = new ObjectMapper();
 
         String jsonArray = objectMapper.writeValueAsString(listOfDtos);
 
         kafkaTemplate.send("topic-list-of-cats-response", jsonArray);
     }
 
+    // TODO. Требуется доарботка
     @KafkaListener(topics = "topic-get-all-cats")
-    void getAllCatsHandler() {
+    void getAllCatsHandler(String tmp) throws JsonProcessingException {
         logger.info("Trying to get all cats");
 
         List<CatDto> listOfDtos = mapper.mapListOfCatsToListOfDtos(catService.getAllCats());
 
-        kafkaTemplate.send("topic-list-of-cats-response", listOfDtos);
+        String jsonArray = objectMapper.writeValueAsString(listOfDtos);
+
+        kafkaTemplate.send("topic-list-of-cats-response", jsonArray);
     }
 
     @KafkaListener(topics = "topic-get-cats-by-breed")
-    void getCatsByBreedHandler(CatBreeds catBreed) {
-        logger.info("Trying to get cat with breed: {}", catBreed);
+    void getCatsByBreedHandler(int index) throws JsonProcessingException {
+        logger.info("Trying to get cat with breed: {}", CatBreeds.values()[index]);
 
-        List<CatDto> listOfDtos = mapper.mapListOfCatsToListOfDtos(catService.getCatsByBreed(catBreed));
+        List<CatDto> listOfDtos = mapper.mapListOfCatsToListOfDtos(catService.getCatsByBreed(CatBreeds.values()[(int) (long) index]));
 
-        kafkaTemplate.send("topic-list-of-cats-response", listOfDtos);
+        String jsonArray = objectMapper.writeValueAsString(listOfDtos);
+
+        kafkaTemplate.send("topic-list-of-cats-response", jsonArray);
     }
 
+    // TODO. Требуется доработка
     @KafkaListener(topics = "topic-update-cat")
-    void updateCatHandler(CatDtoInput catDto) {
+    void updateCatHandler(String catDtoInputJson) throws JsonProcessingException {
+        CatDtoInput catDto = objectMapper.readValue(catDtoInputJson, CatDtoInput.class);
         logger.info("Trying to update cat with birthday: {}", catDto.getBirthday());
 
         Cat cat = mapper.catDtoInputToCat(catDto);
         cat = catService.updateCat(cat);
 
-        kafkaTemplate.send("topic-cat-id-response", cat.getId());
+        CatDto catDtoOutput = mapper.catToCatDto(cat);
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String catDtoOutputJson = ow.writeValueAsString(catDtoOutput);
+
+        kafkaTemplate.send("topic-cat-response", catDtoOutputJson);
     }
 
+    // TODO. Допиши
     @KafkaListener(topics = "topic-delete-cat-by-id")
     void deleteCatByIdHandler(Long id) {
         logger.info("Trying to get cat with id: {}", id);
