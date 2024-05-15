@@ -2,12 +2,16 @@ package ru.isaev.OwnerDtos;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import ru.isaev.Owners.Roles;
 
 import java.util.List;
 
+@Entity
 public class OwnerDto {
-    @JsonProperty("id")
+    @Id
     private Long id;
 
     @JsonProperty("birthday")
@@ -20,6 +24,7 @@ public class OwnerDto {
     private String last_name;
 
     @JsonProperty("idsOfCatsList")
+    @ElementCollection
     private List<Long> idsOfCatsList;
 
     public OwnerDto() {
