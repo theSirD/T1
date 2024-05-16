@@ -77,6 +77,8 @@ public class OwnerEventsHandler {
 
         Owner owner = mapper.ownerDtoToOwner(requestWithDtoDto.getDto());
         owner = ownerService.updateOwner(owner);
+        List<Cat> emptyList = new ArrayList<>();
+        owner.setCatsList(emptyList);
 
         OwnerDto ownerDto = mapper.ownerToOwnerDto(owner);
         List<OwnerDto> listOfOwners = new ArrayList<>();
