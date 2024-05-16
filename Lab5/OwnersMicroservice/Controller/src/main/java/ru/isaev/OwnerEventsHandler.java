@@ -70,7 +70,6 @@ public class OwnerEventsHandler {
         kafkaTemplate.send("topic-owner-response", ownerResponseJson);
     }
 
-    // TODO. Требуется доработка (после обновления часть полей становится null)
     @KafkaListener(topics = "topic-update-owner", groupId = "group-id")
     void updateOwnerHandler(String requestWithDtoDtoJson) throws JsonProcessingException {
         RequestOwnerWithDtoDto requestWithDtoDto = objectMapper.readValue(requestWithDtoDtoJson, RequestOwnerWithDtoDto.class);
