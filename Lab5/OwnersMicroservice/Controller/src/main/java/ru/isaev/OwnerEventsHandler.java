@@ -8,6 +8,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import ru.isaev.CatDtos.CatDto;
 import ru.isaev.CatRequestDtos.RequestByIdDto;
+import ru.isaev.Cats.Cat;
 import ru.isaev.Mapper.IMyMapper;
 import ru.isaev.OwnerDtos.OwnerDto;
 import ru.isaev.OwnerRequestDtos.RequestOwnerByIdDto;
@@ -38,7 +39,7 @@ public class OwnerEventsHandler {
     }
 
     @KafkaListener(topics = "topic-get-owner-by-id", groupId = "group-id")
-    void getCatByIdHandler(String requestByIdJson) throws JsonProcessingException {
+    void getOwnerByIdHandler(String requestByIdJson) throws JsonProcessingException {
         RequestOwnerByIdDto requestById = objectMapper.readValue(requestByIdJson, RequestOwnerByIdDto.class);
 
         OwnerDto owner = mapper.ownerToOwnerDto(ownerService.getOwnerById(requestById.getOwnerId()));
@@ -51,10 +52,28 @@ public class OwnerEventsHandler {
         kafkaTemplate.send("topic-owner-response", ownerResponseJson);
     }
 
+    @KafkaListener(topics = "topic-add-owner", groupId = "group-id")
+    void addOwnerHandler(String requestWithDtoDtoJson) throws JsonProcessingException {
+        RequestOwnerWithDtoDto requestWithDtoDto = objectMapper.readValue(requestWithDtoDtoJson, RequestOwnerWithDtoDto.class);
+
+        Owner owner = mapper.ownerDtoToOwner(requestWithDtoDto.getDto());
+        owner = ownerService.addOwner(owner);
+        List<Cat> emptyList = new ArrayList<>();
+        owner.setCatsList(emptyList);
+        OwnerDto ownerDto = mapper.ownerToOwnerDto(owner);
+        List<OwnerDto> listOfOwners = new ArrayList<>();
+        listOfOwners.add(ownerDto);
+
+        OwnerResponse ownerResponse = new OwnerResponse(requestWithDtoDto.getId(), listOfOwners);
+        String ownerResponseJson = objectMapper.writeValueAsString(ownerResponse);
+
+        kafkaTemplate.send("topic-owner-response", ownerResponseJson);
+    }
+
     // TODO. Требуется доработка (после обновления часть полей становится null)
     @KafkaListener(topics = "topic-update-owner", groupId = "group-id")
-    void updateCatHandler(String requestWithInputDtoDtoJson) throws JsonProcessingException {
-        RequestOwnerWithDtoDto requestWithDtoDto = objectMapper.readValue(requestWithInputDtoDtoJson, RequestOwnerWithDtoDto.class);
+    void updateOwnerHandler(String requestWithDtoDtoJson) throws JsonProcessingException {
+        RequestOwnerWithDtoDto requestWithDtoDto = objectMapper.readValue(requestWithDtoDtoJson, RequestOwnerWithDtoDto.class);
 
         Owner owner = mapper.ownerDtoToOwner(requestWithDtoDto.getDto());
         owner = ownerService.updateOwner(owner);
@@ -71,7 +90,7 @@ public class OwnerEventsHandler {
 
     // TODO. Допиши
     @KafkaListener(topics = "topic-delete-owner-by-id", groupId = "group-id")
-    void deleteCatByIdHandler(String requestByIdJson) throws JsonProcessingException {
+    void deleteOwnerByIdHandler(String requestByIdJson) throws JsonProcessingException {
         RequestOwnerByIdDto requestById = objectMapper.readValue(requestByIdJson, RequestOwnerByIdDto.class);
 
         OwnerDto owner = mapper.ownerToOwnerDto(ownerService.getOwnerById(requestById.getOwnerId()));

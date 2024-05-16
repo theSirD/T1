@@ -49,13 +49,19 @@ public class OwnerController {
     }
 
 
-//    @PostMapping("/add")
-//    public ResponseEntity<OwnerDto> addOwner(@RequestBody OwnerDto ownerDto) {
-//        Owner owner = mapper.ownerDtoToOwner(ownerDto);
-//        ownerService.addOwner(owner);
-//
-//        return ResponseEntity.status(HttpStatus.CREATED).body(ownerDto);
-//    }
+    @PostMapping("/add")
+    public ResponseEntity<String> addOwner(@RequestBody OwnerDto ownerDto) throws JsonProcessingException {
+        Request request = requestResponseService.addRequest();
+        RequestOwnerWithDtoDto requestWithInputDtoDto = new RequestOwnerWithDtoDto(request.getId(), ownerDto);
+
+        String json = mapper.writeValueAsString(requestWithInputDtoDto);
+        kafkaTemplate.send("topic-add-owner", json);
+
+        return new ResponseEntity<>(
+                "Try to see added owner here: /owner/request/" + request.getId(),
+                HttpStatus.ACCEPTED
+        );
+    }
 
     @PostMapping("/edit")
     public ResponseEntity<String> editOwner(@RequestBody OwnerDto ownerDto) throws JsonProcessingException {

@@ -24,9 +24,9 @@ public class OwnerService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void addOwner(Owner owner) {
+    public Owner addOwner(Owner owner) {
         owner.setPassword(passwordEncoder.encode(owner.getPassword()));
-        ownerDAO.save(owner);
+        return ownerDAO.saveAndFlush(owner);
     }
 
     public Owner getOwnerById(Long id) {
