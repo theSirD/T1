@@ -63,6 +63,21 @@ public class OwnerService {
 //        if (!Objects.equals(currentOwner.getId(), owner.getId()) && currentOwner.getRole() != Roles.ROLE_ADMIN)
 //            throw new NotYourProfileException("Not your profile with id = " + owner.getId());
 
+        Owner originalOwner = ownerDAO.findById(owner.getId()).orElseThrow(
+                () -> new OwnerNotFoundException("No cat with id = " + owner.getId()));
+
+        owner.setCatsList(originalOwner.getCatsList());
+        if (owner.getBirthday() == null)
+            owner.setBirthday(originalOwner.getBirthday());
+        if (owner.getFirst_name() == null)
+            owner.setFirstName(originalOwner.getFirst_name());
+        if (owner.getLast_name() == null)
+            owner.setLastName(originalOwner.getLast_name());
+        if (owner.getPassword() == null)
+            owner.setPassword(originalOwner.getPassword());
+        if (owner.getRole() == null)
+            owner.setRole(originalOwner.getRole());
+
         return ownerDAO.saveAndFlush(owner);
     }
 
