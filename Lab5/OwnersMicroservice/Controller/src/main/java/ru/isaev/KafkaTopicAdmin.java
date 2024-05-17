@@ -11,4 +11,9 @@ public class KafkaTopicAdmin {
     public NewTopic getCatResponseTopic() {
         return TopicBuilder.name("topic-owner-response").build();
     }
+
+    @Bean
+    public NewTopic setOwnerOfCatsToNullTopic() {
+        return TopicBuilder.name("topic-set-owner-of-cats-to-null").build();
+    }
 }

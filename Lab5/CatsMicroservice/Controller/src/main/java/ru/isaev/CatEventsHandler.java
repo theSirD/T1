@@ -16,6 +16,7 @@ import ru.isaev.Cats.Cat;
 import ru.isaev.Cats.CatBreeds;
 import ru.isaev.Cats.CatColors;
 import ru.isaev.Mapper.IMyMapper;
+import ru.isaev.Owners.Owner;
 import ru.isaev.Responses.CatResponse;
 
 import java.util.ArrayList;
@@ -141,5 +142,21 @@ public class CatEventsHandler {
         CatResponse catResponse = new CatResponse(requestById.getId(), listOfCats);
         String catResponseJson = objectMapper.writeValueAsString(catResponse);
         kafkaTemplate.send("topic-cat-response", catResponseJson);
+    }
+
+    @KafkaListener(topics = "topic-set-owner-of-cats-to-null", groupId = "group-id")
+    void setOwnerOfCatsToNull(String setOwnerOfCatsToNullDtoJson) throws JsonProcessingException {
+        SetOwnerOfCatsToNullDto setOwnerOfCatsToNullDto = objectMapper.readValue(setOwnerOfCatsToNullDtoJson, SetOwnerOfCatsToNullDto.class);
+
+        List<Long> idOfCatsList = setOwnerOfCatsToNullDto.getOwnerDto().getIdsOfCatsList();
+
+        for (Long id :
+                idOfCatsList) {
+            Cat cat = catService.getCatById(id);
+            cat.setOwner(null);
+            catService.updateCat(cat);
+        }
+
+        logger.info("Operation complete");
     }
 }

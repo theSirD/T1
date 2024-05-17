@@ -115,7 +115,6 @@ public class CatController {
         );
     }
 
-    // TODO. Допиши
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCatById(@PathVariable Long id) throws JsonProcessingException {
         Request request = requestResponseService.addRequest();

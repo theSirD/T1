@@ -81,6 +81,9 @@ public class CatService {
     }
 
     public Cat updateCat(Cat cat) {
+        catRepository.findById(cat.getId()).orElseThrow(
+                () -> new CatNotFoundExceptions("No cat with id = " + cat.getId()));
+
         return catRepository.saveAndFlush(cat);
     }
 

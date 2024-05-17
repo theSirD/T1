@@ -16,9 +16,4 @@ public class KafkaTopicAdmin {
     public NewTopic deleteCatFromListOfPetsTopic() {
         return TopicBuilder.name("topic-delete-cat-from-list-of-pets-by-id").build();
     }
-
-    @Bean
-    public NewTopic getOwnerOfCatTopic() {
-        return TopicBuilder.name("topic-get-owner-of-cat").build();
-    }
 }
