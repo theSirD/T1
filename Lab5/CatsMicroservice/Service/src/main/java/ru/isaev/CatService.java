@@ -2,6 +2,7 @@ package ru.isaev;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,8 +82,18 @@ public class CatService {
     }
 
     public Cat updateCat(Cat cat) {
-        catRepository.findById(cat.getId()).orElseThrow(
+        Cat originalCat = catRepository.findById(cat.getId()).orElseThrow(
                 () -> new CatNotFoundExceptions("No cat with id = " + cat.getId()));
+
+        cat.setOwner(originalCat.getOwner());
+        if (cat.getBirthday() == null)
+            cat.setBirthday(originalCat.getBirthday());
+        if (cat.getBreed() == null)
+            cat.setBreed(originalCat.getBreed());
+        if (cat.getColor() == null)
+            cat.setColor(originalCat.getColor());
+        if (cat.getFriendsList() == null)
+            cat.setFriendsList(originalCat.getFriendsList());
 
         return catRepository.saveAndFlush(cat);
     }

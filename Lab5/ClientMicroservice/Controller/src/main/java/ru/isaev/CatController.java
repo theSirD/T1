@@ -96,11 +96,11 @@ public class CatController {
 //    public ResponseEntity<CatDtoInput> addCat(@RequestBody CatDtoInput catDtoInput) {
 //        kafkaTemplate.send("topic-add-cat", catDtoInput);
 //
-//        // TODO. Тут тоже надо вернуть кота с id
+//
 //        return ResponseEntity.status(HttpStatus.CREATED).body(catDtoInput);
 //    }
 //
-//    // TODO. Требуется доработка (после обновления часть полей становится null)
+
     @PutMapping("/edit")
     public ResponseEntity<String> updateCat(@RequestBody CatDtoInput catDtoInput) throws JsonProcessingException {
         Request request = requestResponseService.addRequest();
