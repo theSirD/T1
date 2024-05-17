@@ -126,9 +126,9 @@ public class CatEventsHandler {
         kafkaTemplate.send("topic-cat-response", catResponseJson);
     }
 
-    // TODO. Допиши
     @KafkaListener(topics = "topic-delete-cat-by-id")
     void deleteCatByIdHandler(String requestByIdJson) throws JsonProcessingException {
+        logger.info(requestByIdJson);
         RequestByIdDto requestById = objectMapper.readValue(requestByIdJson, RequestByIdDto.class);
         logger.info("Trying to delete cat with id: {}", requestById.getCatId());
 

@@ -2,6 +2,8 @@ package ru.isaev;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -24,6 +26,8 @@ import java.util.List;
 @Component
 public class OwnerEventsHandler {
     private KafkaTemplate<String, Object> kafkaTemplate;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final OwnerService ownerService;
 
@@ -103,5 +107,27 @@ public class OwnerEventsHandler {
         OwnerResponse ownerResponse = new OwnerResponse(requestById.getId(), listOfOwners);
         String ownerResponseJson = objectMapper.writeValueAsString(ownerResponse);
         kafkaTemplate.send("topic-owner-response", ownerResponseJson);
+    }
+
+    @KafkaListener(topics = "topic-delete-cat-from-list-of-pets-by-id", groupId = "group-id")
+    void deleteCatFromPetsByIdHandler(String deleteCatFromPetsByIdDtoJson) throws JsonProcessingException {
+        DeleteCatFromPetsByIdDto deleteCatFromPetsByIdDto = objectMapper.readValue(deleteCatFromPetsByIdDtoJson, DeleteCatFromPetsByIdDto.class);
+
+        Owner owner = ownerService.getOwnerById(deleteCatFromPetsByIdDto.getOwnerDto().getId());
+        List<Cat> pets = owner.getCatsList();
+        Cat catToBeDeleted = null;
+        for (Cat cat :
+                pets) {
+            if (cat.getId() == deleteCatFromPetsByIdDto.getCatDto().getId()) {
+                catToBeDeleted = cat;
+                break;
+            };
+        }
+
+        pets.remove(catToBeDeleted);
+        owner.setCatsList(pets);
+        ownerService.updateOwner(owner);
+
+        logger.info("Operation complete");
     }
 }
