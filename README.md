@@ -11,4 +11,4 @@ They are all different applications.
 Microservices were created using Java Spring Boot, Hibernate, Spring Data, JPA и Spring 
 Security.
 
-Communication between microservices takes place via Kafkaю
+Communication between microservices takes place via Kafka
