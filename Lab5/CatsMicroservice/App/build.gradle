@@ -17,7 +17,6 @@ dependencies {
     implementation project(":Lab5:CatsMicroservice:Controller")
     implementation project(":Lab5:CatsMicroservice:Service")
     implementation project(":Lab5:CatsMicroservice:Repository")
-    // TODO. Удали Domain, если не нужен
     implementation project(":Lab5:Domain")
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

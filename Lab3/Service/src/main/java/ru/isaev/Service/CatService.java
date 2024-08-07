@@ -50,7 +50,6 @@ public class CatService {
         ownerDAO.save(currentOwner);
     }
 
-    //TODO 20.4.24. advicecontroller. DONE
     public Cat getCatById(Long id) {
         MyUserDetails currentPrincipal = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Owner currentOwner = currentPrincipal.getOwner();

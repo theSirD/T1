@@ -66,7 +66,6 @@ public class CatController {
         Cat cat = mapper.catDtoInputToCat(catDtoInput);
         catService.addCat(cat);
 
-        //TODO 20.4.24. не пиши такие сообщения в body. DONE
         return ResponseEntity.status(HttpStatus.CREATED).body(catDtoInput);
     }
 
@@ -74,14 +73,12 @@ public class CatController {
     public ResponseEntity<CatDtoInput> editCat(@RequestBody CatDtoInput catDtoInput) {
         Cat cat = mapper.catDtoInputToCat(catDtoInput);
         catService.updateCat(cat);
-        //TODO то же самое. DONE
         return ResponseEntity.status(HttpStatus.OK).body(catDtoInput);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCatById(@PathVariable Long id) {
         catService.removeCatById(id);
-        //TODO то же самое. DONE
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

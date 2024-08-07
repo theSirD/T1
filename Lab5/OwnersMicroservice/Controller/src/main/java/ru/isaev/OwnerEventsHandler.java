@@ -22,7 +22,6 @@ import ru.isaev.Responses.OwnerResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO. Почему без groupId над всеми методами приложение не запускается?
 @Component
 public class OwnerEventsHandler {
     private KafkaTemplate<String, Object> kafkaTemplate;
@@ -93,7 +92,6 @@ public class OwnerEventsHandler {
         kafkaTemplate.send("topic-owner-response", ownerResponseJson);
     }
 
-    // TODO. Допиши
     @KafkaListener(topics = "topic-delete-owner-by-id", groupId = "group-id")
     void deleteOwnerByIdHandler(String requestByIdJson) throws JsonProcessingException {
         RequestOwnerByIdDto requestById = objectMapper.readValue(requestByIdJson, RequestOwnerByIdDto.class);

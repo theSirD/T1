@@ -17,8 +17,6 @@ public class Owner {
     private String first_name;
 
     private String last_name;
-
-    //TODO localedate. DONE
     private LocalDate birthday;
 
     private String password;

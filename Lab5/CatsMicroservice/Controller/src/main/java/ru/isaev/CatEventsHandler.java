@@ -42,17 +42,6 @@ public class CatEventsHandler {
         this.mapper = mapper;
     }
 
-    // TODO. Добавь логику сохранения кота
-//    @KafkaListener(topics = "topic-add-cat")
-//    void addCatHandler(CatDtoInput catDto) {
-//        logger.info("Trying to add cat with birthday: {}", catDto.getBirthday());
-//
-//        Cat cat = mapper.catDtoInputToCat(catDto);
-//        cat = catService.addCat(cat);
-//
-//        // TODO. Верни id
-//    }
-
     @KafkaListener(topics = "topic-get-cat-by-id")
     void getCatByIdHandler(String requestByIdJson) throws JsonProcessingException {
         RequestByIdDto requestById = objectMapper.readValue(requestByIdJson, RequestByIdDto.class);
@@ -68,7 +57,6 @@ public class CatEventsHandler {
         kafkaTemplate.send("topic-cat-response", catResponseJson);
     }
 
-    // TODO. Требуется доарботка
     @KafkaListener(topics = "topic-get-all-cats")
     void getAllCatsHandler(String requestAllJson) throws JsonProcessingException {
         RequestAllDto requestAll = objectMapper.readValue(requestAllJson, RequestAllDto.class);
@@ -108,7 +96,6 @@ public class CatEventsHandler {
         kafkaTemplate.send("topic-cat-response", catResponseJson);
     }
 
-    // TODO. Требуется доработка (после обновления часть полей становится null)
     @KafkaListener(topics = "topic-update-cat")
     void updateCatHandler(String requestWithInputDtoDtoJson) throws JsonProcessingException {
         RequestWithInputDtoDto requestWithInputDtoDto = objectMapper.readValue(requestWithInputDtoDtoJson, RequestWithInputDtoDto.class);

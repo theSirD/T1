@@ -64,7 +64,6 @@ public class RequestResponseService {
         return ownerResponseRepository.findById(id).orElseThrow(() -> new ResponseNotFoundException("Not found response with id = " + id));
     }
 
-    // TODO. Без groupId этот метод не работает. Почему?
     @KafkaListener(topics = "topic-cat-response",
                     groupId = "group-id")
     void getCatResponse(String catResponseJson) throws JsonProcessingException {
@@ -84,7 +83,6 @@ public class RequestResponseService {
         catResponseRepository.save(catResponse);
     }
 
-    // TODO. Без groupId этот метод не работает. Почему?
     @KafkaListener(topics = "topic-owner-response",
             groupId = "group-id")
     void getOwnerResponse(String ownerResponseJson) throws JsonProcessingException {

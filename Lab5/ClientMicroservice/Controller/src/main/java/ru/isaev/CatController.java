@@ -90,16 +90,6 @@ public class CatController {
                 HttpStatus.ACCEPTED
         );
     }
-//
-//    // TODO. Допиши
-//    @PostMapping("/add")
-//    public ResponseEntity<CatDtoInput> addCat(@RequestBody CatDtoInput catDtoInput) {
-//        kafkaTemplate.send("topic-add-cat", catDtoInput);
-//
-//
-//        return ResponseEntity.status(HttpStatus.CREATED).body(catDtoInput);
-//    }
-//
 
     @PutMapping("/edit")
     public ResponseEntity<String> updateCat(@RequestBody CatDtoInput catDtoInput) throws JsonProcessingException {
