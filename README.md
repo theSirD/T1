@@ -1,4 +1,4 @@
-### Microservices with Controller-Service-Dao architecture
+### Microservices with Controller-Service-Dao architecture (Lab 5)
 
 ## Architecture
 There are three microservices:
